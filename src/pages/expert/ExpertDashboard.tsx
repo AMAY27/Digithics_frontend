@@ -62,7 +62,8 @@ const ExpertDashboard : React.FC = () => {
         navigate('/expert/website')
     }
     const handleClose = () => {
-        setIsFormOpen(false)
+        setIsFormOpen(false);
+        getWebsiteData();
     }
     const handleOpen = () => {
         setIsFormOpen(true)
@@ -73,7 +74,7 @@ const ExpertDashboard : React.FC = () => {
         <Navbar/>
         {isLoading ? <LoadingExpertDashboard/> :
         <>
-        <WebsiteAdditionForm isOpen={isFormOpen} onClose={handleClose} id={id ? id: ""}/>
+        <WebsiteAdditionForm isOpen={isFormOpen} onClose={handleClose} id={id ?id: ""}/>
         <div className='grid md:grid-cols-4 gap-4 mx-8 my-6 bg:white'>
             {kpiData.map((kpi:ExpertKpi) => (
                 <KpiCard title={kpi.title} count={kpi.count} color={kpi.color}/>
