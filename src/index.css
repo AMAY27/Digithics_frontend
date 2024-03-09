@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("../public/assets/Copperplate.otf") format("truetype");
+}
+
+body {
+  background-color: #f1f5f9;
+}
+
+.form-error {
+  color: red;
+}
+
+.card-footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-input
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:-webkit-autofill {
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+}
