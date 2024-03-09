@@ -1,11 +1,51 @@
-import React from 'react'
-import { WebsiteAdditionProps } from '../../types'
+import React, { useState } from 'react'
+import { WebsiteAdditionProps, WebsiteDetailsFormForExperts } from '../../types'
+import { addWebsiteForCertificationforExpert } from '../../services/expertServices'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose}) => {
+const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}) => {
+
+    const [webSiteDetails, setWebsiteDetails] = useState<WebsiteDetailsFormForExperts>({
+        userId: id,
+        baseUrl: "",
+        websiteName: "",
+        description: "",
+        primaryExpertId : id
+    })
 
     const handleCloseClick = () =>{
         onClose();
     }
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
+        setWebsiteDetails(p=>({...p,[e.target.name] : e.target.value}))
+    }
+
+    const handleSubmit = async(e:React.FormEvent) => {
+        e.preventDefault();
+        if(id){
+            const response = await addWebsiteForCertificationforExpert(webSiteDetails ); 
+            if(response.status===200){
+                onClose();
+                toast.success("Website added successfully", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+                setWebsiteDetails({
+                    baseUrl : id,
+                    userId : "",
+                    websiteName : "",
+                    description : "",
+                    primaryExpertId : id
+                })
+            }
+            else{
+                toast.error("Error while adding pattern, try again", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+        }
+    }
+
     if(!isOpen) return null;
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
@@ -19,11 +59,11 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose}) =>
                         <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-300'>
                             <input 
                                 type='text' 
-                                name='patterntype'
+                                name='websiteName'
                                 required 
-                                id='patterntype' 
-                                //value={formData.patterntype}
-                                //onChange={handleChange}
+                                id='websitename' 
+                                value={webSiteDetails.websiteName}
+                                onChange={handleChange}
                                 className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Pattern Type"/>
                         </div>
                     </div>
@@ -32,11 +72,11 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose}) =>
                         <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-300'>
                             <input 
                                 type='text' 
-                                name='patternlink' 
-                                id='patternlink'
+                                name='baseUrl' 
+                                id='websitelink'
                                 required
-                                //value={formData.patternlink}
-                                //onChange={handleChange} 
+                                value={webSiteDetails.baseUrl}
+                                onChange={handleChange} 
                                 className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Link where pattern is detected"/>
                         </div>
                     </div>
@@ -45,9 +85,9 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose}) =>
                     <label htmlFor="patterndescription" className='mb-2 block text-md font-medium'>Description *</label>
                     <textarea 
                         name="description" 
-                        id="patterndescription"
-                        //value={formData.description}
-                        //onChange={handleChange}
+                        id="websitedescription"
+                        value={webSiteDetails.description}
+                        onChange={handleChange}
                         required
                         className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for pattern detection and review'></textarea>
                 </div>

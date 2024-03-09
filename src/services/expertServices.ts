@@ -242,14 +242,14 @@ const base64DataToFile = (base64: string, index:number) => {
 }
 
 // Function to add a website for certification
-const addWebsiteForCertification = async (website: WebsiteDetailsFormForExperts) => {
+const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormForExperts) => {
   try {
 
     const response = await api.post(`/website`, website);
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }
 };
 
-export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertification};
+export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertificationforExpert};
