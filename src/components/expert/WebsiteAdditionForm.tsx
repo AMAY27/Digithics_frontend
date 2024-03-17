@@ -25,7 +25,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
         e.preventDefault();
         if(id){
             const response = await addWebsiteForCertificationforExpert(webSiteDetails ); 
-            if(response.status===200){
+            if(response.status===201){
                 onClose();
                 toast.success("Website added successfully", {
                     position: toast.POSITION.TOP_CENTER
@@ -50,7 +50,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
         <div className='bg-white py-2 px-8 rounded-lg relative z-10 space-y-8 h-2/5 w-4/5 overflow-auto'>
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="space-y-4 pt-5">
                 <h2 className='text-2xl text-blue-500 leading-7'>Add a Website</h2>
                 <div className='grid md:grid-cols-3 space-x-4'>
