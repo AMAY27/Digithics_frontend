@@ -75,37 +75,42 @@ const ExpertDashboard : React.FC = () => {
         {isLoading ? <LoadingExpertDashboard/> :
         <>
         <WebsiteAdditionForm isOpen={isFormOpen} onClose={handleClose} id={id ?id: ""}/>
-        <div className='grid md:grid-cols-4 gap-4 mx-8 my-6 bg:white'>
-            {kpiData.map((kpi:ExpertKpi) => (
-                <KpiCard title={kpi.title} count={kpi.count} color={kpi.color}/>
-            ))}
-        </div>
-        <div className='flex justify-between items-center mx-8'>
-            <h2 className='text-3xl text-blue-500'>Websites in evaluation for Dark Patterns</h2>
-            <button className='ml-6 px-12 py-2 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}>Add website for Dark Pattern evaluation</button>
-        </div>
-        <div className='grid md:grid-cols-3 mx-8 my-2 bg:white'>
-            {websiteData.map((website, index)=>(
-                <div key={website.websiteId} 
-                    className='p-3 my-3 mx-4 shadow-md bg-white rounded-xl border-blue-300 cursor-pointer'  
-                >
-                    <div>
-                        <div className="flex justify-between items-center">
-                            <h2 className='font-bold text-xl text-blue-500'>{website.websiteName}</h2>
-                            <Tooltip title={website.hoverText} arrow>
-                                <div className={`p-2 font-bold text-white rounded-2xl ${website.phaseColor}`}>{website.phaseText}</div>
-                            </Tooltip>
-                        </div>
-                        <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
-                        <button 
-                            className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
-                                onClick={() => handleClick(website.websiteId, website.websiteName)}
-                            >Website Dashboard
-                        </button>
-                    </div>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-40 mx-4'>
+            <div className='col-span-1 md:col-span-2'>
+                <div className='md:flex justify-between items-center mx-8 shadow-xl bg-white mb-4 p-8 rounded-xl'>
+                    <h2 className='text-xl text-blue-500'>Websites in evaluation for Dark Patterns</h2>
+                    <button className='ml-6 px-12 py-2 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}>Add website for Dark Pattern evaluation</button>
                 </div>
-            ))}
-        </div></>}
+                <div className='grid md:grid-cols-1 mx-8 my-2 bg:white'>
+                    {websiteData.map((website, index)=>(
+                        <div key={website.websiteId} 
+                            className='p-3 my-3 shadow-md bg-white rounded-xl border-blue-300 cursor-pointer'  
+                        >
+                            <div>
+                                <div className="flex justify-between items-center">
+                                    <h2 className='font-bold text-xl text-blue-500'>{website.websiteName}</h2>
+                                    <Tooltip title={website.hoverText} arrow>
+                                        <div className={`p-2 font-bold text-white rounded-2xl ${website.phaseColor}`}>{website.phaseText}</div>
+                                    </Tooltip>
+                                </div>
+                                <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
+                                <button 
+                                    className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
+                                    onClick={() => handleClick(website.websiteId, website.websiteName)}
+                                >Website Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className='col-span-1 gap-4 mx-8 bg:white'>
+                {kpiData.map((kpi:ExpertKpi) => (
+                    <KpiCard title={kpi.title} count={kpi.count} color={kpi.color}/>
+                ))}
+            </div>
+        </div>
+        </>}
     </>
   )
 }

@@ -16,11 +16,13 @@ const KpiCard: React.FC<ExpertKpi> = ({title, count, color}) => {
     const bgGradient = title==="totalWebsitesAssigned" ? "#805DA8" : title==="totalInProgressWebsites" ? "#F9C32F" : title==="totalPublishedWebsites" ? "#538D3F" : "#E6641D"
     const bgRight = title==="totalWebsitesAssigned" ? "#533F5C" : title==="totalInProgressWebsites" ? "#9C770A" : title==="totalPublishedWebsites" ? "#2E5222" : "#8C1A0A"
   return (
-    <div className={`shadow-xl rounded-md md:col-span-1 px-2 py-2`} style={{
+    <div className={`shadow-xl rounded-md md:col-span-1 px-2 py-4 mt-2`} style={{
         background:`linear-gradient(to right, ${bgRight}, ${bgGradient})`,
     }}>
-        <div className='flex justify-end'><div className={` p-1 rounded-md ${iconbg}`}>{icon}</div></div>
-        <p className='font-bold text-2xl mt-4 mx-4 text-white'>{count}</p>
+        <div className='flex justify-between items-center'>
+          <p className='font-bold text-2xl mx-4 text-white'>{count}</p>
+          <div className={` p-1 rounded-md ${iconbg}`}>{icon}</div>
+        </div>
         <h2 className='mb-4 mx-4 text-lg text-white'>{heading}</h2>
     </div>
   )
