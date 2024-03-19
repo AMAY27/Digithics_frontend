@@ -124,6 +124,14 @@ export interface PatternData {
   isPatternExists: boolean;
 }
 
+export interface PatternCarouselDivProps {
+  comments: Comment[], 
+  description: string, 
+  expertName: string ,
+  patternImageUrls: string[], 
+  patternType: string
+}
+
 export interface expertData {
   id: string;
   name: string;
@@ -135,6 +143,7 @@ export interface WebsiteData {
   phase: string;
   websiteId: string;
   isCompleted: boolean;
+  patternDetails: PatternData[];
   isDarkPatternFree: boolean;
   expertDetails: expertData[];
   userId: string;

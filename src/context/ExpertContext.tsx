@@ -50,6 +50,7 @@ export const ExpertProvider: React.FC<ExpertProviderProps> = ({ children }) => {
         phase : "",
         websiteId : "",
         isCompleted : false,
+        patternDetails:[],
         isDarkPatternFree : false,
         expertDetails : [],
         userId : "",

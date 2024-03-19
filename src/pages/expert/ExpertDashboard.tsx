@@ -11,6 +11,7 @@ import { Tooltip } from '@mui/material';
 import KpiCard from '../../components/expert/KpiCard';
 import LoadingExpertDashboard from '../../components/expert/LoadingExpertDashboard';
 import WebsiteAdditionForm from '../../components/expert/WebsiteAdditionForm';
+import PatterndivforWebsitCarousel from '../../components/expert/PatterndivforWebsitCarousel';
 
 const ExpertDashboard : React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -28,6 +29,8 @@ const ExpertDashboard : React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [activePatternIndex, setActivePatternIndex] = useState(0);
+    const [websiteIdforPatternCarouselShift, setWebsiteIdforPatternCarouselShift] = useState("");
 
     const id  = localStorage.getItem("userId")
     const authToken = localStorage.getItem("authToken")
@@ -69,6 +72,10 @@ const ExpertDashboard : React.FC = () => {
         setIsFormOpen(true)
     }
 
+    const handleNextPatternClick = () => {
+        setActivePatternIndex(activePatternIndex + 1);
+    }
+
   return (
     <>
         <Navbar/>
@@ -78,7 +85,7 @@ const ExpertDashboard : React.FC = () => {
         <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-40 mx-4'>
             <div className='col-span-1 md:col-span-2'>
                 <div className='md:flex justify-between items-center mx-8 shadow-xl bg-white mb-4 p-8 rounded-xl'>
-                    <h2 className='text-xl text-blue-500'>Websites in evaluation for Dark Patterns</h2>
+                    <h2 className='flex text-center text-xl text-blue-500'>Websites in evaluation for Dark Patterns</h2>
                     <button className='ml-6 px-12 py-2 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}>Add website for Dark Pattern evaluation</button>
                 </div>
                 <div className='grid md:grid-cols-1 mx-8 my-2 bg:white'>
@@ -94,6 +101,16 @@ const ExpertDashboard : React.FC = () => {
                                     </Tooltip>
                                 </div>
                                 <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
+                                {website.patternDetails.length !== 0 ? 
+                                    <div className='flex bg-green-100 mt-4 py-6'>
+                                        <button>Prev</button>
+                                        <PatterndivforWebsitCarousel comments={website.patternDetails[activePatternIndex].comments} description={website.patternDetails[activePatternIndex].description} expertName={website.patternDetails[activePatternIndex].expertName} patternImageUrls={website.patternDetails[activePatternIndex].patternImageUrls} patternType={website.patternDetails[activePatternIndex].patternType}/>
+                                        <button onClick={handleNextPatternClick}>Next</button>
+                                    </div> : 
+                                    <div className='bg-gray-100 flex justify-center items-center mt-4 py-6 px-8 w-full'>
+                                        <h2 className='text-blue-500 '>No Pattern detetcted yet for this website</h2>
+                                    </div>
+                                }
                                 <button 
                                     className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
                                     onClick={() => handleClick(website.websiteId, website.websiteName)}
