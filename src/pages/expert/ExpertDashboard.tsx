@@ -102,7 +102,7 @@ const ExpertDashboard : React.FC = () => {
                 <div className='grid md:grid-cols-1 mx-8 my-2 bg:white'>
                     {websiteData.map((website, index)=>(
                         <div key={website.websiteId} 
-                            className='p-3 my-3 shadow-md bg-white rounded-xl border-blue-300 cursor-pointer'  
+                            className='p-3 my-3 shadow-md bg-white rounded-xl border-blue-300'  
                         >
                             <div>
                                 <div className="flex justify-between items-center">
