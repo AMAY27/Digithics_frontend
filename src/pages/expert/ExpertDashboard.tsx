@@ -12,6 +12,9 @@ import KpiCard from '../../components/expert/KpiCard';
 import LoadingExpertDashboard from '../../components/expert/LoadingExpertDashboard';
 import WebsiteAdditionForm from '../../components/expert/WebsiteAdditionForm';
 import PatterndivforWebsitCarousel from '../../components/expert/PatterndivforWebsitCarousel';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ExpertDashboard : React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -32,6 +35,15 @@ const ExpertDashboard : React.FC = () => {
     const [activePatternIndex, setActivePatternIndex] = useState(0);
     const [websiteIdforPatternCarouselShift, setWebsiteIdforPatternCarouselShift] = useState("");
     const [activePatternIndices, setActivePatternIndices] = useState<{ [key: string]: number }>({});
+    const settings = {
+        dots: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 1000,
+      };
 
     const id  = localStorage.getItem("userId")
     const authToken = localStorage.getItem("authToken")
@@ -74,11 +86,13 @@ const ExpertDashboard : React.FC = () => {
     }
 
     const handleNextPatternClick = (patternDetailLength:number, websiteId:string) => {
-        if(websiteId === websiteIdforPatternCarouselShift){
-            setActivePatternIndex(activePatternIndex + 1);
-        }else{
+        if(websiteId !== websiteIdforPatternCarouselShift){
             setWebsiteIdforPatternCarouselShift(websiteId);
             setActivePatternIndex(0);
+            console.log(websiteId, patternDetailLength, activePatternIndex);   
+        }else{
+            setActivePatternIndex(activePatternIndex + 1);
+            console.log(websiteId, patternDetailLength, activePatternIndex);  
         }
     }
 
@@ -107,21 +121,22 @@ const ExpertDashboard : React.FC = () => {
                                     </Tooltip>
                                 </div>
                                 <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
-                                {/* {website.patternDetails.length !== 0 ? 
-                                    <div className='flex mt-4 py-6'>
-                                        <button>Prev</button>
-                                        <PatterndivforWebsitCarousel 
-                                            description={website.patternDetails[activePatternIndices[website.websiteId]].description}
-                                            expertName={website.patternDetails[activePatternIndices[website.websiteId]].expertName}
-                                            patternImageUrls={website.patternDetails[activePatternIndices[website.websiteId]].patternImageUrls}
-                                            patternType={website.patternDetails[activePatternIndices[website.websiteId]].patternType}
-                                        />
-                                        <button onClick={() => handleNextPatternClick(website.websiteId, website.patternDetails.length)}>Next</button>
-                                    </div> : 
+                                {website.patternDetails.length !== 0 ? 
+                                        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+                                            {website.patternDetails.map((pattern)=>(
+                                                <PatterndivforWebsitCarousel
+                                                    description={pattern.description}
+                                                    expertName={pattern.expertName}
+                                                    patternImageUrls={pattern.patternImageUrls}
+                                                    patternType={pattern.patternType}
+                                                />
+                                            ))}
+                                        </div>
+                                    : 
                                     <div className='bg-gray-100 flex justify-center items-center mt-4 py-6 px-8 w-full'>
                                         <h2 className='text-blue-500 '>No Pattern detetcted yet for this website</h2>
                                     </div>
-                                } */}
+                                }
                                 <button 
                                     className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
                                     onClick={() => handleClick(website.websiteId, website.websiteName)}
