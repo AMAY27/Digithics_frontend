@@ -12,9 +12,7 @@ import KpiCard from '../../components/expert/KpiCard';
 import LoadingExpertDashboard from '../../components/expert/LoadingExpertDashboard';
 import WebsiteAdditionForm from '../../components/expert/WebsiteAdditionForm';
 import PatterndivforWebsitCarousel from '../../components/expert/PatterndivforWebsitCarousel';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import ImageSlides from '../../components/expert/ImageSlides';
 
 const ExpertDashboard : React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -32,18 +30,8 @@ const ExpertDashboard : React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [activePatternIndex, setActivePatternIndex] = useState(0);
-    const [websiteIdforPatternCarouselShift, setWebsiteIdforPatternCarouselShift] = useState("");
-    const [activePatternIndices, setActivePatternIndices] = useState<{ [key: string]: number }>({});
-    const settings = {
-        dots: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        infinite: true,
-        autoplay: true,
-        autoplaySpeed: 1000,
-      };
+    const [zindex, setZindex ] = useState(false)
+    const z_index = zindex ? "z-[-10]" : "z-[30]";
 
     const id  = localStorage.getItem("userId")
     const authToken = localStorage.getItem("authToken")
@@ -79,22 +67,25 @@ const ExpertDashboard : React.FC = () => {
     }
     const handleClose = () => {
         setIsFormOpen(false);
+        setZindex(false);
         getWebsiteData();
     }
     const handleOpen = () => {
+        setZindex(true);
         setIsFormOpen(true)
     }
 
-    const handleNextPatternClick = (patternDetailLength:number, websiteId:string) => {
-        if(websiteId !== websiteIdforPatternCarouselShift){
-            setWebsiteIdforPatternCarouselShift(websiteId);
-            setActivePatternIndex(0);
-            console.log(websiteId, patternDetailLength, activePatternIndex);   
-        }else{
-            setActivePatternIndex(activePatternIndex + 1);
-            console.log(websiteId, patternDetailLength, activePatternIndex);  
-        }
-    }
+    // const handleImageClick = (img:string) => {
+    //     setImgToDisplay(img);
+    //     setImageOpen(true);
+    //     setZindex(true);
+    //   }
+    
+    // const handleImageClose = () => {
+    //     setImageOpen(false);
+    //     setZindex(false);
+    // }
+
 
   return (
     <>
@@ -129,6 +120,7 @@ const ExpertDashboard : React.FC = () => {
                                                     expertName={pattern.expertName}
                                                     patternImageUrls={pattern.patternImageUrls}
                                                     patternType={pattern.patternType}
+                                                    z_index={z_index}
                                                 />
                                             ))}
                                         </div>

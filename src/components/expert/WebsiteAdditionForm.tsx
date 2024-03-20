@@ -49,7 +49,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
     if(!isOpen) return null;
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
-        <div className='bg-white py-2 px-8 rounded-lg relative z-10 space-y-8 h-3/5 w-3/5 overflow-auto'>
+        <div className='bg-white py-2 px-8 rounded-lg relative z-30 space-y-8 h-3/5 w-3/5 overflow-auto'>
         <form onSubmit={handleSubmit}>
             <div className="space-y-4 pt-5">
                 <h2 className='text-2xl text-blue-500 leading-7'>Add a Website</h2>
