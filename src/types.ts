@@ -129,7 +129,8 @@ export interface PatternCarouselDivProps {
   description: string, 
   expertName: string ,
   patternImageUrls: string[], 
-  patternType: string
+  patternType: string,
+  z_index: string,
 }
 
 export interface expertData {
