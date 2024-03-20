@@ -106,8 +106,8 @@ const ExpertDashboard : React.FC = () => {
                                     </Tooltip>
                                 </div>
                                 <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
-                                {/* {website.patternDetails.length !== 0 ? 
-                                    <div className='flex bg-green-100 mt-4 py-6'>
+                                {website.patternDetails.length !== 0 ? 
+                                    <div className='flex mt-4 py-6'>
                                         <button>Prev</button>
                                         <PatterndivforWebsitCarousel description={website.patternDetails[activePatternIndex].description} expertName={website.patternDetails[activePatternIndex].expertName} patternImageUrls={website.patternDetails[activePatternIndex].patternImageUrls} patternType={website.patternDetails[activePatternIndex].patternType}/>
                                         <button onClick={() => handleNextPatternClick(website.patternDetails.length, website.websiteId)}>Next</button>
@@ -115,7 +115,7 @@ const ExpertDashboard : React.FC = () => {
                                     <div className='bg-gray-100 flex justify-center items-center mt-4 py-6 px-8 w-full'>
                                         <h2 className='text-blue-500 '>No Pattern detetcted yet for this website</h2>
                                     </div>
-                                } */}
+                                }
                                 <button 
                                     className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
                                     onClick={() => handleClick(website.websiteId, website.websiteName)}
