@@ -68,6 +68,11 @@ const ExpertSignin = () => {
                                     placeholder="Enter your password"/>
                             </div>
                         </div>
+                        <div className='border-2 border-blue-500 bg-blue-200 rounded-xl mt-4 p-3'>
+                            <p className='text-blue-500 font-bold'>For Project Demo use following Credentials:</p>
+                            <p><span className='text-blue-500 font-bold'>Email:</span> amay@expert.com</p>
+                            <p><span className='text-blue-500 font-bold'>Password:</span> expert</p>
+                        </div>
                         <button className='bg-blue-500 p-2 rounded-md mt-4 w-full font-bold hover:bg-blue-700' type='submit'>Login</button>
                         </form>
                     </div> 

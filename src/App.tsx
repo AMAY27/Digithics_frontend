@@ -27,7 +27,7 @@ function App() {
         <AdminProvider>
           <Routes>
             {/* <!-- Common routes --> */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<ExpertSignin />} />
 
             <Route path="/processpage" element={<ProcessPage />} />
             <Route path="/servicepage" element={<ServicePage />} />

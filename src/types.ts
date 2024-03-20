@@ -125,7 +125,7 @@ export interface PatternData {
 }
 
 export interface PatternCarouselDivProps {
-  comments: Comment[], 
+  //comments: Comment[], 
   description: string, 
   expertName: string ,
   patternImageUrls: string[], 

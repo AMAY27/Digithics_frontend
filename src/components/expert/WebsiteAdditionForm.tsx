@@ -64,7 +64,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                                 id='websitename' 
                                 value={webSiteDetails.websiteName}
                                 onChange={handleChange}
-                                className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Pattern Type"/>
+                                className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Website Name"/>
                         </div>
                     </div>
                     <div className='col-span-2'>
@@ -77,7 +77,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                                 required
                                 value={webSiteDetails.baseUrl}
                                 onChange={handleChange} 
-                                className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Link where pattern is detected"/>
+                                className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Link"/>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                         value={webSiteDetails.description}
                         onChange={handleChange}
                         required
-                        className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for pattern detection and review'></textarea>
+                        className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for Website'></textarea>
                 </div>
                             {/* <div className='col-span-full border-2 rounded-md flex flex-col items-center justify-center'>
                                 <p className='mb-4 block text-md font-medium pt-4'>Select images from the pattern list from extension</p>
