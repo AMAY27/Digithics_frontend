@@ -225,7 +225,7 @@ const publishWebsite = async(websiteId:string, expertId: string, isCertified: bo
     const response = await api.put(`/website/${websiteId}/publish`, body)
     return response.status;
   } catch (error) {
-    
+    console.error(error)
   }
 }
 
@@ -244,7 +244,6 @@ const base64DataToFile = (base64: string, index:number) => {
 // Function to add a website for certification
 const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormForExperts) => {
   try {
-
     const response = await api.post(`/website`, website);
     return response;
   } catch (error) {
@@ -252,4 +251,13 @@ const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormFo
   }
 };
 
-export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertificationforExpert};
+const addUpVoteToWebsite = async (websiteId: string, userId: string) => {
+  try {
+    const response = await api.post(`/website/${websiteId}/user/${userId}/upVote`)
+    return response
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertificationforExpert, addUpVoteToWebsite};

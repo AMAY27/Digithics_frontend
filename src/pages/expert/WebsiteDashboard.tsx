@@ -241,7 +241,7 @@ const WebsiteDashboard = () => {
                 <p>{websiteData.description}</p>
               </div>
               <div className='w-full rounded-lg mt-2 p-2'>
-                <h2 className='font-bold'>Experts</h2>
+                <h2 className='font-bold'>Contributors</h2>
                 {websiteData.expertDetails.map((expert)=>(
                   expert.id === websiteData.primaryExpertId ? <div className='flex items-center my-2'><Avatar {...stringAvatar(expert.name)} className='mx-2'/>{expert.name}<span className='text-gray-400 italic'> - Primary</span></div> : <div className='flex items-center my-2'><Avatar {...stringAvatar(expert.name)} className='mx-2'/>{expert.name}</div>
                 ))}
@@ -272,7 +272,7 @@ const WebsiteDashboard = () => {
               <div className='flex justify-between items-center mt-2'>
                 <div className='flex items-center'>
                 <div className='mx-2'>
-                  <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Created By</label>
+                  <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Contributor</label>
                   <select id="orient" 
                     className='p-2 bg-transparent border-2 rounded-md w-40'
                     onChange={(e) => handleSelectOption('expertName', e.target.value)}
@@ -295,7 +295,7 @@ const WebsiteDashboard = () => {
                     ))}
                   </select>
                 </div>
-                <div className='mx-2'>
+                {/* <div className='mx-2'>
                   <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Status</label>
                   <select id="orient" 
                     className='p-2 bg-transparent border-2 rounded-md w-40'
@@ -306,7 +306,7 @@ const WebsiteDashboard = () => {
                         <option value={phase}>{phase}</option>
                     ))}
                   </select>
-                </div>  
+                </div>   */}
               </div>
               <div className='mx-2'>
                 {websiteData.phase === "InProgress" ? <button onClick={openForm} className='px-8 py-2 rounded-md bg-blue-500 text-white'>Add a Pattern</button> : null}

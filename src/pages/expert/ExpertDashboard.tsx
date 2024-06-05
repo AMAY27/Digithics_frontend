@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
-import { getWebsites, getKpiDetails } from '../../services/expertServices'
+import { getWebsites, getKpiDetails, stringAvatar, addUpVoteToWebsite } from '../../services/expertServices'
 import Navbar from '../../components/expert/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { setRedirectCallback } from "../../utils/AxiosHelper";
@@ -7,7 +7,7 @@ import AuthContext from "../../context/AuthContext1";
 import withExpertAuth from '../../hoc/withExpertAuth';
 import { toast } from "react-toastify";
 import { ExpertKpi, WebsiteData } from '../../types';
-import { Tooltip } from '@mui/material';
+import { Tooltip, Avatar } from '@mui/material';
 import KpiCard from '../../components/expert/KpiCard';
 import LoadingExpertDashboard from '../../components/expert/LoadingExpertDashboard';
 import WebsiteAdditionForm from '../../components/expert/WebsiteAdditionForm';
@@ -42,6 +42,7 @@ const ExpertDashboard : React.FC = () => {
             if(id && authToken){
                 let websites : any = []
                 websites = await getWebsites(id);
+                //console.log(websites);
                 let kpis:ExpertKpi[] = await getKpiDetails(id);
                 setKpiData(kpis);
                 setWebsiteData(websites);
@@ -86,6 +87,11 @@ const ExpertDashboard : React.FC = () => {
     //     setZindex(false);
     // }
 
+    const handleUpVoteClick = async (websiteId:string, userId:string) => {
+        const response = await addUpVoteToWebsite(websiteId, userId)
+        console.log(response);
+    }
+
 
   return (
     <>
@@ -105,14 +111,21 @@ const ExpertDashboard : React.FC = () => {
                             className='p-3 my-3 shadow-md bg-white rounded-xl border-blue-300'  
                         >
                             <div>
+                                <div className="flex items-center space-x-4">
+                                    <Avatar {...stringAvatar(website.contributorName)}/>
+                                    <div>
+                                        <h2 className='text-gray-400 font-bold'>{website.contributorName}</h2>
+                                        <p className='text-gray-400 font-italic'>Contributor</p>
+                                    </div>
+                                </div>
                                 <div className="flex justify-between items-center">
                                     <h2 className='font-bold text-xl text-blue-500'>{website.websiteName}</h2>
-                                    <Tooltip title={website.hoverText} arrow>
-                                        <div className={`p-2 font-bold text-white rounded-2xl ${website.phaseColor}`}>{website.phaseText}</div>
-                                    </Tooltip>
                                 </div>
                                 <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
-                                {website.patternDetails.length !== 0 ? 
+                                <div className='p-2 border-2 border-gray-200' onClick={() => handleUpVoteClick(website.websiteId, id?id: "")}>
+                                    Up Vote
+                                </div>
+                                {/* {website.patternDetails.length !== 0 ? 
                                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                                             {website.patternDetails.map((pattern)=>(
                                                 <PatterndivforWebsitCarousel
@@ -128,7 +141,7 @@ const ExpertDashboard : React.FC = () => {
                                     <div className='bg-gray-100 flex justify-center items-center mt-4 py-6 px-8 w-full'>
                                         <h2 className='text-blue-500 '>No Pattern detetcted yet for this website</h2>
                                     </div>
-                                }
+                                } */}
                                 <button 
                                     className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
                                     onClick={() => handleClick(website.websiteId, website.websiteName)}

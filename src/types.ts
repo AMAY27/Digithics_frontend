@@ -150,6 +150,7 @@ export interface WebsiteData {
   userId: string;
   additionalUrls: [];
   primaryExpertId: string;
+  contributorName: string;
   phaseColor: string;
   phaseText: string;
   hoverText: string;
