@@ -152,6 +152,7 @@ const WebsiteDashboard = () => {
     const handleMessageFromContentScript = (event:MessageEvent) => {
       if (event.source === window && event.data.action === 'sendDataToReactApp') {
         const dataFromContentScript = event.data;
+        console.log(dataFromContentScript);
         setExtensionPatterns(dataFromContentScript.result.patternType);
       }
     }
@@ -309,7 +310,7 @@ const WebsiteDashboard = () => {
                 </div>   */}
               </div>
               <div className='mx-2'>
-                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='px-8 py-2 rounded-md bg-blue-500 text-white'>Add a Pattern</button> : null}
+                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
               </div>
               </div>
             {!isCardLoading && displayEmptyPatternsText ? <div className='bg-gray-100 h-40 flex justify-center items-center w-full rounded-xl mr-6 my-6'><p className=' text-2xl'>No patterns detected</p></div> : !isCardLoading ? 

@@ -254,10 +254,37 @@ const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormFo
 const addUpVoteToWebsite = async (websiteId: string, userId: string) => {
   try {
     const response = await api.post(`/website/${websiteId}/user/${userId}/upVote`)
-    return response
+    return response.data
   } catch (error) {
     console.error(error)
   }
 }
 
-export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertificationforExpert, addUpVoteToWebsite};
+const addDownVoteToWebsite = async (websiteId: string, userId: string) => {
+  try {
+    const response = await api.post(`/website/${websiteId}/user/${userId}/downVote`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export { 
+  getPatternsData, 
+  getSpecificPattern, 
+  CommentPost, 
+  replyPost, 
+  getWebsites, 
+  patternPost, 
+  stringAvatar, 
+  postVerification, 
+  getUserDetails, 
+  getSpecificWebsite, 
+  publishWebsite, 
+  getKpiDetails, 
+  postImages, 
+  base64DataToFile, 
+  addWebsiteForCertificationforExpert, 
+  addUpVoteToWebsite,
+  addDownVoteToWebsite
+};

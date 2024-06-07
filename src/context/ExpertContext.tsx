@@ -57,6 +57,8 @@ export const ExpertProvider: React.FC<ExpertProviderProps> = ({ children }) => {
         additionalUrls : [],
         primaryExpertId : "",
         contributorName: "",
+        upVotes : [],
+        downVotes: [],
         phaseColor : "",
         phaseText : "",
         hoverText : "",

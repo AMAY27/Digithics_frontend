@@ -151,6 +151,8 @@ export interface WebsiteData {
   additionalUrls: [];
   primaryExpertId: string;
   contributorName: string;
+  upVotes : string[],
+  downVotes: string[],
   phaseColor: string;
   phaseText: string;
   hoverText: string;

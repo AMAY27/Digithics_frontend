@@ -30,6 +30,7 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
     const z_index = zIndex ? "-z-50" : "z-0";
     const [patternTime, setPatternTime] = useState<number>()
     const [imageTime, setImageTime] = useState<number>();
+    const [browseImage, setBrowseImage] = useState<File>();
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
         setFormData(p=>({...p,[e.target.name] : e.target.value}))
     }
@@ -58,6 +59,15 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
         setZindex(true);
     }
 
+    // const browsedImageEditClick = (image:File) => {
+    //     setPatternTime(image.lastModified);
+    //     setImageTime(image.lastModified);
+    //     setImgToDisplay(image);
+    //     setImageOpen(true);
+    //     setZindex(true);
+
+    // }
+
     const handleFormImageClose = () => {
         setFormImageOpen(false);
         setZindex(false);
@@ -72,6 +82,23 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
         const file = base64DataToFile(base64,index)
         const imageExists = images.some((img) => img.name === file.name);
         imageExists ? toast.error("image already added") : setImages((prev) => [...prev, file])
+    }
+
+    const handleImageChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.files);
+        const browsedImages = e.target.files;
+        console.log(browsedImages);
+        if(browsedImages){
+            const browsedImagesArray = Array.from(browsedImages)
+            console.log(browsedImagesArray);
+            browsedImagesArray.forEach((img)=>{
+                const imageExists = images.some((prevImages) => prevImages.name === img.name);
+                imageExists ? toast.error("image Already added") : setImages((prev) => [...prev, img])
+            })
+        }
+        console.log(images);
+        // const imageExists = images.some((img)=> img.name === browsedImg.name);
+        // imageExists ? toast.error("image already added") : setImages((prev) => [...prev, browsedImg])
     }
 
     const handleAddclickExtensionPattern = (patternType:string, patternUrl: string, patternDesc:string) => {
@@ -189,9 +216,9 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                     className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for pattern detection and review'></textarea>
                             </div>
                             <div className='col-span-full border-2 rounded-md flex flex-col items-center justify-center'>
-                                <p className='mb-4 block text-md font-medium pt-4'>Select images from the pattern list from extension</p>
-                                {/* <label htmlFor="images" className='mb-2 block text-md font-medium p-2 bg-gray-100 mb-4 rounded-md cursor-pointer'>
-                                    <span className="text-blue-500">Choose File</span>
+                                <p className='mb-4 block text-md font-medium pt-4'>Select images from the pattern list from extension or</p>
+                                <label htmlFor="images" className='mb-2 block text-md font-medium p-2 bg-gray-100 mb-4 rounded-md cursor-pointer'>
+                                    <span className="text-blue-500">Browse File</span>
                                     <input
                                         type='file'
                                         name='images'
@@ -201,7 +228,7 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                         multiple 
                                         className='hidden'
                                     />
-                                </label> */}
+                                </label>
                                 {images.length > 0 && (
                                     <div className="my-2 px-6 grid grid-cols-4 gap-4 w-full">
                                         {images.map((image, index) => {
@@ -212,7 +239,7 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                                     src={URL.createObjectURL(image)}
                                                     alt={`Preview ${index + 1}`}
                                                     className="w-full h-20 object-cover rounded-md border-2 border-gray-200 opacity-50 cursor-pointer"
-                                                    onClick={()=>handleAddedImageClick(image)}
+                                                    onClick={() => handleAddedImageClick(image)}
                                                 />
                                                 <button
                                                     type="button"
@@ -236,7 +263,7 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                     </form>
                 </div>
                 <div className='md:col-span-2 border-2 p-4 h-[30rem] overflow-auto'>
-                    <div className='border-b-2 pb-2'><h1 className='text-lg text-blue-500 font-bold'>Pattern Details from VORT extension</h1></div>
+                    <div className='border-b-2 pb-2'><h1 className='text-lg text-blue-500 font-bold'>Pattern Details from DIGIHICS extension</h1></div>
                     <div className='pb-4'> 
                         {extensionPatterns.length===0 ? 
                         <div className="flex justify-center items-center h-20 bg-gray-100 shadow-md rounded-md my-4"><h2>No patterns added from extension</h2></div> : 

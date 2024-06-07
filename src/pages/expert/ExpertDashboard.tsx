@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
-import { getWebsites, getKpiDetails, stringAvatar, addUpVoteToWebsite } from '../../services/expertServices'
+import { getWebsites, getKpiDetails, stringAvatar, addUpVoteToWebsite, addDownVoteToWebsite } from '../../services/expertServices'
 import Navbar from '../../components/expert/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { setRedirectCallback } from "../../utils/AxiosHelper";
@@ -13,6 +13,8 @@ import LoadingExpertDashboard from '../../components/expert/LoadingExpertDashboa
 import WebsiteAdditionForm from '../../components/expert/WebsiteAdditionForm';
 import PatterndivforWebsitCarousel from '../../components/expert/PatterndivforWebsitCarousel';
 import ImageSlides from '../../components/expert/ImageSlides';
+import { FaRegThumbsDown, FaRegThumbsUp  } from "react-icons/fa6";
+import { MdOutlineAddTask } from "react-icons/md";
 
 const ExpertDashboard : React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -26,6 +28,7 @@ const ExpertDashboard : React.FC = () => {
         };
     }, [authContext]);
     const [websiteData, setWebsiteData] = useState<WebsiteData[]>([])
+    const [loadingWebsiteIds, setLoadingWebsiteIds] = useState<string[]>([]);
     const [kpiData, setKpiData] = useState<ExpertKpi[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
@@ -34,6 +37,7 @@ const ExpertDashboard : React.FC = () => {
     const z_index = zindex ? "z-[-10]" : "z-[30]";
 
     const id  = localStorage.getItem("userId")
+    const userName = localStorage.getItem("userName")
     const authToken = localStorage.getItem("authToken")
     const getWebsiteData = useCallback( async () => {
         setIsLoading(true);
@@ -88,8 +92,31 @@ const ExpertDashboard : React.FC = () => {
     // }
 
     const handleUpVoteClick = async (websiteId:string, userId:string) => {
+        setLoadingWebsiteIds(prevIds => [...prevIds, websiteId]);
         const response = await addUpVoteToWebsite(websiteId, userId)
         console.log(response);
+        if (response) {
+            setWebsiteData(prevData =>
+              prevData.map(website =>
+                website.websiteId === websiteId ? { ...website, upVotes: response.websiteUpvotes, downVotes: response.websiteDownvotes} : website
+              )
+            );
+        }
+        setLoadingWebsiteIds(prevIds => prevIds.filter(id => id !== websiteId));
+    }
+
+    const handleDownVoteClick = async (websiteId:string, userId:string) => {
+        setLoadingWebsiteIds(prevIds => [...prevIds, websiteId]);
+        const response = await addDownVoteToWebsite(websiteId, userId)
+        console.log(response);
+        if (response) {
+            setWebsiteData(prevData =>
+              prevData.map(website =>
+                website.websiteId === websiteId ? { ...website, downVotes: response.websiteDownvotes, upVotes: response.websiteUpvotes} : website
+              )
+            );
+        }
+        setLoadingWebsiteIds(prevIds => prevIds.filter(id => id !== websiteId));
     }
 
 
@@ -99,16 +126,22 @@ const ExpertDashboard : React.FC = () => {
         {isLoading ? <LoadingExpertDashboard/> :
         <>
         <WebsiteAdditionForm isOpen={isFormOpen} onClose={handleClose} id={id ?id: ""}/>
-        <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-40 mx-4'>
-            <div className='col-span-1 md:col-span-2'>
-                <div className='md:flex justify-between items-center mx-8 shadow-xl bg-white mb-4 p-8 rounded-xl'>
-                    <h2 className='flex text-center text-xl text-blue-500'>Websites in evaluation for Dark Patterns</h2>
-                    <button className='ml-6 px-12 py-2 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}>Add website for Dark Pattern evaluation</button>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-40'>
+            <div className='col-span-1 md:col-span-2 md:mx-8'>
+                <div className='shadow-xl bg-white mb-4 p-2 sm:p-4 md:rounded-xl'>
+                    <div className="flex justify-center items-center">
+                        <Avatar {...stringAvatar(userName?userName:"")}/>
+                        <div className='ml-2 sm:ml-6'>
+                            <p className='hidden sm:block mb-2 flex justify-center'>Start with contributing websites and application which follows deceptive patterns</p>
+                            <button className='flex items-center text-base sm:text-lg space-x-2 px-6 py-1 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}><MdOutlineAddTask/> Contribute</button>
+                        </div>
+                    </div>
                 </div>
-                <div className='grid md:grid-cols-1 mx-8 my-2 bg:white'>
+                <p className='flex justify-center text-sm sm:text-base font-bold'>Websites contributed by users at Digithics</p>
+                <div className='grid md:grid-cols-1 my-2 bg:white'>
                     {websiteData.map((website, index)=>(
                         <div key={website.websiteId} 
-                            className='p-3 my-3 shadow-md bg-white rounded-xl border-blue-300'  
+                            className='p-3 my-1 shadow-md bg-white md:rounded-xl border-blue-300'  
                         >
                             <div>
                                 <div className="flex items-center space-x-4">
@@ -119,11 +152,38 @@ const ExpertDashboard : React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <h2 className='font-bold text-xl text-blue-500'>{website.websiteName}</h2>
+                                    <h2 className='font-bold text-base sm:text-xl text-blue-500'>{website.websiteName}</h2>
                                 </div>
-                                <div className='w-60'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
-                                <div className='p-2 border-2 border-gray-200' onClick={() => handleUpVoteClick(website.websiteId, id?id: "")}>
-                                    Up Vote
+                                <div className='w-60 pb-2 md:pb-0'><p className="truncate ... text-blue-500">{website.baseUrl}</p></div>
+                                <div className="flex justify-between items-center pt-2 text-sm sm:text-base">
+                                    <div className='flex justify-center space-x-1 md:space-x-4'>
+                                        <button 
+                                            className={`grid grid-cols-1 place-items-center md:flex space-x-2 items-center py-1 md:p-2 ${website.upVotes.includes(userName || "") ? 'text-blue-500 font-bold' : ''}`} 
+                                            onClick={() => handleUpVoteClick(website.websiteId, id || "")}
+                                            disabled={loadingWebsiteIds.includes(website.websiteId)}
+                                        >
+                                            <FaRegThumbsUp />
+                                            <p>Up Vote</p>
+                                        </button>
+                                        <button 
+                                            className={`grid grid-cols-1 place-items-center md:flex space-x-2 items-center py-1 md:p-2 ${website.downVotes.includes(userName || "") ? 'text-blue-500 font-bold' : ''}`} 
+                                            onClick={() => handleDownVoteClick(website.websiteId, id || "")}
+                                            disabled={loadingWebsiteIds.includes(website.websiteId)}
+                                        >
+                                            <FaRegThumbsUp />
+                                            <p>Down Vote</p>
+                                        </button>
+                                    </div>
+                                    <div className='flex justify-end space-x-2 md:space-x-4 items-center'>
+                                        <div className="flex items-center text-blue-500 space-x-2 text-sm sm:text-lg">
+                                            <p>{website.upVotes.length}</p>
+                                            <FaRegThumbsUp/>
+                                        </div>
+                                        <div className="flex items-center text-blue-500 space-x-2 text-sm sm:text-lg">
+                                            <p>{website.downVotes.length}</p>
+                                            <FaRegThumbsDown/>
+                                        </div>
+                                    </div>
                                 </div>
                                 {/* {website.patternDetails.length !== 0 ? 
                                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
