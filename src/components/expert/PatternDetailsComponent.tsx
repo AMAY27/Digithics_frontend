@@ -20,6 +20,8 @@ import {
   OpenInNew as OpenInNewIcon,
 } from "@mui/icons-material";
 import ImageSlides from "./ImageSlides";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   isOpen,
@@ -119,7 +121,7 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-white sm:px-4 py-2 rounded-lg relative z-30 w-full h-full sm:w-4/5 sm:h-4/5">
+      <div className="bg-white sm:px-4 py-2 rounded-lg z-30 w-full h-full sm:w-4/5 sm:h-4/5 overflow-y-auto">
       <ImageSlides 
         image={imgToDisplay ? imgToDisplay : ""} 
         isOpen={imgOpen} 
@@ -180,14 +182,14 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                 )}
               </div>
               <div className="w-60">
-              <a href={patternData.detectedUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500" id="detectedUrl" onClick={()=>handleUrlClick(patternData.description)}>
-              <p className="truncate ...">{patternData.detectedUrl}...<OpenInNewIcon sx={{ width: "20px", height: "20px" }} /></p>
-              </a>
+                <a href={patternData.detectedUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500" id="detectedUrl" onClick={()=>handleUrlClick(patternData.description)}>
+                  <p className="truncate ...">{patternData.detectedUrl}...<OpenInNewIcon sx={{ width: "20px", height: "20px" }} /></p>
+                </a>
               </div>
             </div>
           )}
           <div className="md:grid grid-cols-3">
-            <div className="col-span-1 md:col-span-2 sm:h-[25rem] sm:overflow-auto sm:pr-4">
+            <div className="col-span-1 md:col-span-2 sm:h-[25rem] sm:pr-4">
               <div className="border-b-2 p-4 bg-gray-100 rounded-lg mx-4 mt-4 text-sm sm:text-base">
                 <h2 className="font-bold">Feedback</h2>
                 <p>{patternData.description}</p>
@@ -225,6 +227,15 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                   )}
                 </div>
               </div> */}
+              <div className='sm:hidden'>
+                <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={false} interval={3000} className='sm:py-4'>
+                  {patternData.patternImageUrls.map((img)=>(
+                    <div className="w-full lg:py-8 lg:px-8 bg-gray-200">
+                      <img src={img} alt='pattern snapshots' />
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
               <div>
                 {expertVerificationPhase.includes("NotVerified") ? (
                   <div className={`col-span-full mt-2 px-4 pt-4 pb-2 flex items-center`}>
@@ -285,9 +296,9 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
               </div>
             </div>
           <div className="md:col-span-1 sm:hover:border-l-4 sm:ml-4 px-4">
-            <div><h2 className="text-xl font-bold text-blue-500">Screenshots</h2></div>
+          <div><h2 className="text-xl font-bold text-blue-500">Screenshots</h2></div>
           {patternData.patternImageUrls.length > 0 ? (
-            <div className="my-2 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div className="hidden my-2 sm:grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {patternData.patternImageUrls.map((image, index) => {
                 //const file = formData.get('files') as File
                 return(

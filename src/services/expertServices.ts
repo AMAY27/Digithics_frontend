@@ -191,6 +191,8 @@ function stringAvatar(name: string) {
   return {
     sx: {
       bgcolor: stringToColor(name),
+      width: 36,
+      height: 36
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };

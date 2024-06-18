@@ -218,20 +218,20 @@ const WebsiteDashboard = () => {
     }
 
   return (
-    <div>
+    <div className={`${zindex ? 'overflow-y-hidden':''}`}>
         <Navbar/>
         {isLoading ? <LoadingPatternCard/> :
         <div>
         <PatternAdditionForm isOpen={isPatternformOpen} onClose={closeFrom} />
         <PatternDetailsComponent isOpen={isPatternModalOpen} onClose={closePatternModal} expertId={experId ? experId : ""}/>
         <PublishForm isOpen={isPublishOpen} onClose={handlePublishClose} patterns={patterns} expertId={experId ? experId : ""} websiteId={websiteId? websiteId: ""}/>
-        <div className='sm:mx-24 h-screen flex flex-col sm:flex-row gap-0 sm:gap-4 sm:mt-8'>
+        <div className={`sm:mx-12 lg:mx-24 h-screen flex flex-col sm:flex-row gap-0 sm:gap-4 sm:mt-8`}>
           <div className={`sm:w-1/3 shadow-xl sm:rounded-2xl bg-white h-fit py-6 px-4 ${z_index} sm:sticky sm:top-0`}>
             <div className='flex justify-between items-center'>
               <h2 className='text-xl sm:text-2xl font-bold text-blue-500'>{websiteName}</h2>
               <div className='mx-2 mt-2 sm:mt-0 flex justify-end'>
-                <button onClick={openForm} className='sm:hidden px-4 py-2 rounded-full bg-blue-500 text-white text-2xl'>+</button>
-                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='hidden sm:block px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
+                <button onClick={openForm} className='flex justify-center items-center lg:hidden px-2 rounded-full bg-blue-500 text-white text-2xl'>+</button>
+                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='hidden lg:block px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
               </div>
             </div>
             <Link to={websiteData.baseUrl} target="_blank" className='text-blue-500'>
@@ -246,10 +246,10 @@ const WebsiteDashboard = () => {
               <div className='w-full my-2 space-y-2'>
                 <h2 className='font-bold'>Filters</h2>
                 <div className='flex items-center'>
-                  <div className='mx-2 text-sm sm:text-base'>
+                  <div className='text-sm sm:text-base w-1/2'>
                     <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Contributor</label>
                     <select id="orient" 
-                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md sm:w-40'
+                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md'
                       onChange={(e) => handleSelectOption('expertName', e.target.value)}
                       >
                       <option value="">All</option>
@@ -258,10 +258,10 @@ const WebsiteDashboard = () => {
                       ))}
                     </select>
                   </div>
-                  <div className='mx-2 text-sm sm:text-base'>
+                  <div className='text-sm sm:text-base w-1/2'>
                     <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Pattern Type</label>
                     <select id="orient" 
-                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md sm:w-40'
+                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md'
                       onChange={(e) => handleSelectOption('patternType', e.target.value)}
                       >
                       <option value="">All</option>
@@ -300,7 +300,7 @@ const WebsiteDashboard = () => {
               </div>
             </div>
           </div>
-          <div className='flex-1 sm:h-auto px-4 sm:px-12 sm:pb-4'>
+          <div className='flex-1 sm:h-auto px-4 lg:px-12 sm:pb-4'>
             {!isCardLoading && displayEmptyPatternsText ? <div className='bg-gray-100 h-40 flex justify-center items-center w-full rounded-xl mr-6 my-6'><p className=' text-2xl'>No patterns detected</p></div> : !isCardLoading ? 
             filteredArray.map((pattern : PatternData,index)=>(
               <div className={`lg:grid grid-cols-1`}>
