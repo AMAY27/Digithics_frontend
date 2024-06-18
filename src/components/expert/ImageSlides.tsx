@@ -19,7 +19,7 @@ const ImageSlides:React.FC<ImageSliderProops> = ({image, isOpen, onClose})  => {
     }
     return (
       <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
-          <div className='bg-white p-8 rounded-lg relative z-[50] space-y-8 w-4/5 h-4/5 overflow-auto'>
+          <div className='bg-white sm:p-8 sm:rounded-lg relative z-[50] sm:space-y-8 w-full h-full sm:w-4/5 sm:h-4/5 overflow-auto flex justify-center items-center '>
               <button
                   type="button"
                   onClick={onClose}

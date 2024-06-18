@@ -119,8 +119,12 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-white px-4 py-2 rounded-lg relative z-30 w-4/5 h-4/5">
-      <ImageSlides image={imgToDisplay ? imgToDisplay : ""} isOpen={imgOpen} onClose={handleImageClose}/>
+      <div className="bg-white sm:px-4 py-2 rounded-lg relative z-30 w-full h-full sm:w-4/5 sm:h-4/5">
+      <ImageSlides 
+        image={imgToDisplay ? imgToDisplay : ""} 
+        isOpen={imgOpen} 
+        onClose={handleImageClose}
+      />
         <>
           <ConfirmVerifyModal
             isOpen={verifyClicked}
@@ -140,16 +144,16 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
             </>
           ) : (
             <div className="space-y-4 px-4 pt-2 pb-2">
-              <div className="flex justify-between items-center mb-1">
+              <div className="sm:flex justify-between items-center mb-1">
                 <div className="flex items-center">
                   <h2 className="font-bold text-2xl text-blue-500 mr-5">
                     {patternData.patternType}
                   </h2>
-                  <div
+                  {/* <div
                     className={`text-white p-2 rounded-2xl ${getBgColorClass}`}
                   >
                     {patternData.phaseText}
-                  </div>
+                  </div> */}
                 </div>
                 {patternData.createdByExpertId === expertId ? (
                   <div className="flex items-center text-md ">
@@ -183,12 +187,12 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
             </div>
           )}
           <div className="md:grid grid-cols-3">
-            <div className="md:col-span-2 h-[25rem] overflow-auto pr-4">
-              <div className="border-b-2 p-4 bg-gray-100 rounded-lg mx-4 mt-4">
+            <div className="col-span-1 md:col-span-2 sm:h-[25rem] sm:overflow-auto sm:pr-4">
+              <div className="border-b-2 p-4 bg-gray-100 rounded-lg mx-4 mt-4 text-sm sm:text-base">
                 <h2 className="font-bold">Feedback</h2>
                 <p>{patternData.description}</p>
               </div>
-              <div className="flex items-center mt-5">
+              {/* <div className="flex items-center mt-5">
                 <h2 className="px-4 py-2 text-xl text-blue-500 font-bold">
                   Verification 
                 </h2>
@@ -211,8 +215,8 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                     </div>
                   ) : null
                 )}
-              </div>
-              <div className="grid grid-cols-2 mx-4 mt-3">
+              </div> */}
+              {/* <div className="grid grid-cols-2 mx-4 mt-3">
                 <div className="col-span-1 bg-gray-100 rounded-lg border-b-2 p-3">
                   {patternData.expertVerifications.map((verify) =>
                     <div className="text-md flex justify-center">
@@ -220,7 +224,7 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div>
                 {expertVerificationPhase.includes("NotVerified") ? (
                   <div className={`col-span-full mt-2 px-4 pt-4 pb-2 flex items-center`}>
@@ -280,10 +284,10 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                 </div>
               </div>
             </div>
-          <div className="md:col-span-1 hover:border-l-4 ml-4 px-4">
+          <div className="md:col-span-1 sm:hover:border-l-4 sm:ml-4 px-4">
             <div><h2 className="text-xl font-bold text-blue-500">Screenshots</h2></div>
           {patternData.patternImageUrls.length > 0 ? (
-            <div className="my-2 grid grid-cols-2 gap-4 w-full">
+            <div className="my-2 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {patternData.patternImageUrls.map((image, index) => {
                 //const file = formData.get('files') as File
                 return(

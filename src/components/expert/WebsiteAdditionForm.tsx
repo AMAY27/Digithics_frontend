@@ -3,6 +3,7 @@ import { WebsiteAdditionProps, WebsiteDetailsFormForExperts } from '../../types'
 import { addWebsiteForCertificationforExpert } from '../../services/expertServices'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IoMdClose  } from 'react-icons/io';
 
 const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}) => {
 
@@ -49,10 +50,16 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
     if(!isOpen) return null;
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
-        <div className='bg-white py-2 px-8 rounded-lg relative z-30 space-y-8 h-3/5 w-3/5 overflow-auto'>
+        <div className='bg-white px-8 rounded-lg relative z-30 py-8 h-auto w-3/5 overflow-auto'>
         <form onSubmit={handleSubmit}>
-            <div className="space-y-4 pt-5">
-                <h2 className='text-2xl text-blue-500 leading-7'>Add a Website</h2>
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h2 className='text-lg text-blue-500 font-bold leading-7'>Contribute the website which follows dark patterns</h2>
+                    <IoMdClose
+                        onClick={handleCloseClick}
+                        className="hover:bg-blue-200 rounded-lg p-2 text-4xl"
+                    />
+                </div>
                 <div className='grid md:grid-cols-3 space-x-4'>
                     <div className='col-span-1'>
                         <label htmlFor="patterntype" className='mb-2 block text-md font-medium'>Website Name *</label>
@@ -131,9 +138,8 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                                     </div>
                                 )}
                             </div> */}
-                            <div className='grid md:grid-cols-3 space-x-7'>
-                                <button className='col-span-2 border-[1px] border-blue-500 hover:bg-blue-500 hover:text-white p-3 rounded-lg' type='submit'>Add website for review</button>
-                                <button className='col-span-1 p-3 rounded-lg hover:bg-gray-300' onClick={handleCloseClick}>Close</button>
+                            <div className='flex justify-center'>
+                                <button className='col-span-2 border-[1px] border-blue-500 hover:bg-blue-500 hover:text-white p-3 rounded-lg' type='submit'>Submit website</button>
                             </div>
                         </div>
                     </form>

@@ -15,6 +15,7 @@ import PatterndivforWebsitCarousel from '../../components/expert/PatterndivforWe
 import ImageSlides from '../../components/expert/ImageSlides';
 import { FaRegThumbsDown, FaRegThumbsUp  } from "react-icons/fa6";
 import { MdOutlineAddTask } from "react-icons/md";
+import DarkTypes from '../../components/expert/DarkTypes';
 
 const ExpertDashboard : React.FC = () => {
     const authContext = useContext(AuthContext);
@@ -34,8 +35,7 @@ const ExpertDashboard : React.FC = () => {
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
     const navigate = useNavigate();
     const [zindex, setZindex ] = useState(false)
-    const z_index = zindex ? "z-[-10]" : "z-[30]";
-
+    const z_index = zindex ? "z-[-30]" : "z-[0]";
     const id  = localStorage.getItem("userId")
     const userName = localStorage.getItem("userName")
     const authToken = localStorage.getItem("authToken")
@@ -46,7 +46,6 @@ const ExpertDashboard : React.FC = () => {
             if(id && authToken){
                 let websites : any = []
                 websites = await getWebsites(id);
-                //console.log(websites);
                 let kpis:ExpertKpi[] = await getKpiDetails(id);
                 setKpiData(kpis);
                 setWebsiteData(websites);
@@ -126,11 +125,13 @@ const ExpertDashboard : React.FC = () => {
         {isLoading ? <LoadingExpertDashboard/> :
         <>
         <WebsiteAdditionForm isOpen={isFormOpen} onClose={handleClose} id={id ?id: ""}/>
-        <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-40'>
-            <div className='col-span-1 md:col-span-2 md:mx-8'>
-                <div className='shadow-xl bg-white mb-4 p-2 sm:p-4 md:rounded-xl'>
-                    <div className="flex justify-center items-center">
-                        <Avatar {...stringAvatar(userName?userName:"")}/>
+        <div className='grid grid-cols-1 md:grid-cols-3 md:mt-8 mt-4 md:mx-5 xl:mx-20'>
+            <div className={`col-span-1 md:col-span-2 md:mx-8 ${z_index}`}>
+                <div className={`shadow-xl bg-white mb-4 p-2 sm:p-4 md:rounded-xl`}>
+                    <div className={`flex justify-center items-center`}>
+                        <div>
+                            <Avatar {...stringAvatar(userName?userName:"")}/>
+                        </div>
                         <div className='ml-2 sm:ml-6'>
                             <p className='hidden sm:block mb-2 flex justify-center'>Start with contributing websites and application which follows deceptive patterns</p>
                             <button className='flex items-center text-base sm:text-lg space-x-2 px-6 py-1 border-[1px] border-blue-500 rounded-xl text-md hover:bg-blue-500 hover:text-white' onClick={handleOpen}><MdOutlineAddTask/> Contribute</button>
@@ -138,10 +139,10 @@ const ExpertDashboard : React.FC = () => {
                     </div>
                 </div>
                 <p className='flex justify-center text-sm sm:text-base font-bold'>Websites contributed by users at Digithics</p>
-                <div className='grid md:grid-cols-1 my-2 bg:white'>
+                <div className='grid lg:grid-cols-2 md:gap-2 my-2 bg:white'>
                     {websiteData.map((website, index)=>(
                         <div key={website.websiteId} 
-                            className='p-3 my-1 shadow-md bg-white md:rounded-xl border-blue-300'  
+                            className={`p-3 my-1 shadow-md bg-white md:rounded-xl border-blue-300 lg:col-span-1`}  
                         >
                             <div>
                                 <div className="flex items-center space-x-4">
@@ -205,17 +206,20 @@ const ExpertDashboard : React.FC = () => {
                                 <button 
                                     className='w-full my-4 py-1 px-2 border-2 border-blue-500 rounded-xl font-bold hover:bg-blue-300'
                                     onClick={() => handleClick(website.websiteId, website.websiteName)}
-                                >Website Dashboard
+                                >Explore Deceptive patterns in website
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='col-span-1 gap-4 mx-8 bg:white'>
-                {kpiData.map((kpi:ExpertKpi) => (
-                    <KpiCard title={kpi.title} count={kpi.count} color={kpi.color}/>
-                ))}
+            <div className={`col-span-1 gap-4 mx-4 xl:mx-8 bg:white ${z_index}`}>
+                <DarkTypes isDisplayedOnDashboard={true}/>
+                <div className='grid grid-cols-2 gap-2'>
+                    {kpiData.map((kpi:ExpertKpi) => (
+                        <KpiCard title={kpi.title} count={kpi.count} color={kpi.color}/>
+                    ))}
+                </div>
             </div>
         </div>
         </>}

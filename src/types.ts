@@ -168,6 +168,7 @@ export interface PatternCardProps {
   loggedInExpert: string;
   openModal: () => void;
   patternData: PatternData;
+  z_index: String;
 }
 
 export interface extensionImages {

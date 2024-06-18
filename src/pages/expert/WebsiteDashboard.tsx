@@ -11,6 +11,7 @@ import AuthContext from "../../context/AuthContext1";
 import withExpertAuth from '../../hoc/withExpertAuth';
 import { toast } from "react-toastify";
 import { Avatar, IconButton, Tooltip} from '@mui/material';
+import { IoMdArrowDropdown } from "react-icons/io";
 import LoadingPatternCard from '../../components/expert/LoadingPatternCard';
 import LoadingCards from '../../components/expert/LoadingCards';
 import PublishForm from '../../components/expert/PublishForm';
@@ -224,13 +225,14 @@ const WebsiteDashboard = () => {
         <PatternAdditionForm isOpen={isPatternformOpen} onClose={closeFrom} />
         <PatternDetailsComponent isOpen={isPatternModalOpen} onClose={closePatternModal} expertId={experId ? experId : ""}/>
         <PublishForm isOpen={isPublishOpen} onClose={handlePublishClose} patterns={patterns} expertId={experId ? experId : ""} websiteId={websiteId? websiteId: ""}/>
-        <div className='mx-24 h-screen grid md:grid-cols-3 gap-4 mt-8'>
-          <div className={`md:col-span-1 shadow-xl rounded-2xl bg-white h-fit py-6 px-4 ${z_index}`}>
+        <div className='sm:mx-24 h-screen flex flex-col sm:flex-row gap-0 sm:gap-4 sm:mt-8'>
+          <div className={`sm:w-1/3 shadow-xl sm:rounded-2xl bg-white h-fit py-6 px-4 ${z_index} sm:sticky sm:top-0`}>
             <div className='flex justify-between items-center'>
-              <h2 className='text-3xl font-bold text-blue-500'>{websiteName}</h2>
-              {websiteData.primaryExpertId === experId && websiteData.phase==="InProgress" ? 
-                (!isPublishBtnDisabled ? <button className={`${bgForPublishBtn} px-3 py-2 rounded-lg text-white`} onClick={handlePublish}>Publish</button> : <button className={`${bgForPublishBtn} px-3 py-2 rounded-lg text-white`} >Publish</button> )  
-              : websiteData.phase==="Published" ? <Tooltip title={websiteData.phaseText} arrow><p className='p-2 border-2 border-green-300 rounded-md text-green-500 font-bold'>Published</p></Tooltip> : null}
+              <h2 className='text-xl sm:text-2xl font-bold text-blue-500'>{websiteName}</h2>
+              <div className='mx-2 mt-2 sm:mt-0 flex justify-end'>
+                <button onClick={openForm} className='sm:hidden px-4 py-2 rounded-full bg-blue-500 text-white text-2xl'>+</button>
+                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='hidden sm:block px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
+              </div>
             </div>
             <Link to={websiteData.baseUrl} target="_blank" className='text-blue-500'>
               <p className="truncate ...">{websiteData.baseUrl}...</p>
@@ -241,10 +243,39 @@ const WebsiteDashboard = () => {
                 <h2 className='font-bold'>Description</h2>
                 <p>{websiteData.description}</p>
               </div>
+              <div className='w-full my-2 space-y-2'>
+                <h2 className='font-bold'>Filters</h2>
+                <div className='flex items-center'>
+                  <div className='mx-2 text-sm sm:text-base'>
+                    <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Contributor</label>
+                    <select id="orient" 
+                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md sm:w-40'
+                      onChange={(e) => handleSelectOption('expertName', e.target.value)}
+                      >
+                      <option value="">All</option>
+                      {experts.map((expert)=>(
+                          expert === expertName ? <option value={expert}>You</option> : <option value={expert}>{expert}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className='mx-2 text-sm sm:text-base'>
+                    <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Pattern Type</label>
+                    <select id="orient" 
+                      className='p-1 sm:p-2 bg-transparent border-2 rounded-md sm:w-40'
+                      onChange={(e) => handleSelectOption('patternType', e.target.value)}
+                      >
+                      <option value="">All</option>
+                      {patternTypes.map((type)=>(
+                          <option value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div className='w-full rounded-lg mt-2 p-2'>
-                <h2 className='font-bold'>Contributors</h2>
+                <h2 className='font-bold'>Contributor</h2>
                 {websiteData.expertDetails.map((expert)=>(
-                  expert.id === websiteData.primaryExpertId ? <div className='flex items-center my-2'><Avatar {...stringAvatar(expert.name)} className='mx-2'/>{expert.name}<span className='text-gray-400 italic'> - Primary</span></div> : <div className='flex items-center my-2'><Avatar {...stringAvatar(expert.name)} className='mx-2'/>{expert.name}</div>
+                  <div className='flex items-center my-2'><Avatar {...stringAvatar(expert.name)} className='mx-2'/>{expert.name}</div>
                 ))}
               </div>
               <h2 className='font-bold py-2 px-2'>Dark Pattern References</h2>
@@ -269,53 +300,12 @@ const WebsiteDashboard = () => {
               </div>
             </div>
           </div>
-          <div className='md:col-span-2 h-[80%] px-12 py-4 shadow-xl rounded-2xl bg-white overflow-auto'>
-              <div className='flex justify-between items-center mt-2'>
-                <div className='flex items-center'>
-                <div className='mx-2'>
-                  <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Contributor</label>
-                  <select id="orient" 
-                    className='p-2 bg-transparent border-2 rounded-md w-40'
-                    onChange={(e) => handleSelectOption('expertName', e.target.value)}
-                    >
-                    <option value="">All</option>
-                    {experts.map((expert)=>(
-                        expert === expertName ? <option value={expert}>You</option> : <option value={expert}>{expert}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className='mx-2'>
-                  <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Pattern Type</label>
-                  <select id="orient" 
-                    className='p-2 bg-transparent border-2 rounded-md w-40'
-                    onChange={(e) => handleSelectOption('patternType', e.target.value)}
-                    >
-                    <option value="">All</option>
-                    {patternTypes.map((type)=>(
-                        <option value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
-                {/* <div className='mx-2'>
-                  <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Status</label>
-                  <select id="orient" 
-                    className='p-2 bg-transparent border-2 rounded-md w-40'
-                    onChange={(e) => handleSelectOption('phase', e.target.value)}
-                    >
-                    <option value="">All</option>
-                    {phases.map((phase)=>(
-                        <option value={phase}>{phase}</option>
-                    ))}
-                  </select>
-                </div>   */}
-              </div>
-              <div className='mx-2'>
-                {websiteData.phase === "InProgress" ? <button onClick={openForm} className='px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
-              </div>
-              </div>
+          <div className='flex-1 sm:h-auto px-4 sm:px-12 sm:pb-4'>
             {!isCardLoading && displayEmptyPatternsText ? <div className='bg-gray-100 h-40 flex justify-center items-center w-full rounded-xl mr-6 my-6'><p className=' text-2xl'>No patterns detected</p></div> : !isCardLoading ? 
             filteredArray.map((pattern : PatternData,index)=>(
-              <PatternCard patternData={pattern} loggedInExpert = {experId ? experId : ""} openModal = {()=> openPatternModal(pattern.id)}/>
+              <div className={`lg:grid grid-cols-1`}>
+                <PatternCard patternData={pattern} loggedInExpert = {experId ? experId : ""} openModal = {()=> openPatternModal(pattern.id)} z_index = {z_index}/>
+              </div>
             ))  : <LoadingCards/>
             }
           </div>
