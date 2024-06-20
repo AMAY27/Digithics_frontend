@@ -50,17 +50,17 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
     if(!isOpen) return null;
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
-        <div className='bg-white px-8 rounded-lg relative z-30 py-8 h-auto w-3/5 overflow-auto'>
+        <div className='bg-white px-4 lg:px-8 lg:rounded-lg relative z-30 py-8 h-screen w-full lg:w-3/5 overflow-auto'>
         <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
+            <div className="space-y-2 lg:space-y-4">
                 <div className="flex items-center justify-between">
-                    <h2 className='text-lg text-blue-500 font-bold leading-7'>Contribute the website which follows dark patterns</h2>
+                    <h2 className='text-base lg:text-lg text-blue-500 font-bold leading-7'>Contribute the website which follows dark patterns</h2>
                     <IoMdClose
                         onClick={handleCloseClick}
                         className="hover:bg-blue-200 rounded-lg p-2 text-4xl"
                     />
                 </div>
-                <div className='grid md:grid-cols-3 space-x-4'>
+                <div className='lg:grid lg:grid-cols-3 space-y-2 lg:space-x-4'>
                     <div className='col-span-1'>
                         <label htmlFor="patterntype" className='mb-2 block text-md font-medium'>Website Name *</label>
                         <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-300'>
@@ -96,7 +96,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                         value={webSiteDetails.description}
                         onChange={handleChange}
                         required
-                        className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for Website'></textarea>
+                        className='block w-full rounded-md border-0 lg:py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for Website'></textarea>
                 </div>
                             {/* <div className='col-span-full border-2 rounded-md flex flex-col items-center justify-center'>
                                 <p className='mb-4 block text-md font-medium pt-4'>Select images from the pattern list from extension</p>
@@ -139,7 +139,7 @@ const WebsiteAdditionForm:React.FC<WebsiteAdditionProps>= ({isOpen, onClose, id}
                                 )}
                             </div> */}
                             <div className='flex justify-center'>
-                                <button className='col-span-2 border-[1px] border-blue-500 hover:bg-blue-500 hover:text-white p-3 rounded-lg' type='submit'>Submit website</button>
+                                <button className='lg:col-span-2 border-[1px] border-blue-500 hover:bg-blue-500 hover:text-white p-3 rounded-lg' type='submit'>Submit website</button>
                             </div>
                         </div>
                     </form>
