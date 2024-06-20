@@ -145,29 +145,18 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
               <PatternUpdateForm isOpen={editing} onClose={onCloseEdit} />
             </>
           ) : (
-            <div className="space-y-4 px-4 pt-2 pb-2">
+            <div className="sm:space-y-4 px-4 pt-2 pb-2">
               <div className="sm:flex justify-between items-center mb-1">
                 <div className="flex items-center">
                   <h2 className="font-bold text-2xl text-blue-500 mr-5">
                     {patternData.patternType}
                   </h2>
-                  {/* <div
-                    className={`text-white p-2 rounded-2xl ${getBgColorClass}`}
-                  >
-                    {patternData.phaseText}
-                  </div> */}
                 </div>
                 {patternData.createdByExpertId === expertId ? (
                   <div className="flex items-center text-md ">
                     <h2 className="italic font-serif text-gray-500 mr-2">
                       Added By - you
                     </h2>
-                    {/* <div>
-                      <LiaEdit
-                        className="hover:bg-blue-200 rounded-lg p-2 text-4xl"
-                        onClick={() => setEditing(true)}
-                      />
-                    </div> */}
                   </div>
                 ) : (
                   <div className="flex items-center text-md">
@@ -194,44 +183,14 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                 <h2 className="font-bold">Feedback</h2>
                 <p>{patternData.description}</p>
               </div>
-              {/* <div className="flex items-center mt-5">
-                <h2 className="px-4 py-2 text-xl text-blue-500 font-bold">
-                  Verification 
-                </h2>
-                {patternData.expertVerifications.map((verify) =>
-                  verify.expertId === expertId &&
-                  verify.expertVerificationPhase === "NotVerified" ? (
-                    <div className="flex justify-center col-span-1 rounded-lg">
-                      <button
-                        className="border-2 bg-white hover:bg-green-300 p-2 mr-5 rounded-xl bg-green-100 border-green-300"
-                        onClick={() => verifyOpen(true)}
-                      >
-                        <div className="flex items-center"><VerifiedIcon className="mr-2"/><p>Is a Pattern</p></div>
-                      </button>
-                      <button
-                        className="border-2 bg-white hover:bg-red-300 p-2 rounded-xl bg-red-100 border-red-300"
-                        onClick={() => verifyOpen(false)}
-                      >
-                        <div className="flex items-center"><ErrorOutlineIcon className="mr-2"/><p>Not a Pattern</p></div>
-                      </button>
-                    </div>
-                  ) : null
-                )}
-              </div> */}
-              {/* <div className="grid grid-cols-2 mx-4 mt-3">
-                <div className="col-span-1 bg-gray-100 rounded-lg border-b-2 p-3">
-                  {patternData.expertVerifications.map((verify) =>
-                    <div className="text-md flex justify-center">
-                      {verify.expertId!==expertId ? verify.expertName : "You"} : {verify.expertVerificationPhase==="NotVerified" ? "Not Verified" : verify.expertVerificationPhase==="VerifiedWithPattern" ? "Verified With Pattern" : "Verified Without Pattern"}
-                    </div>
-                  )}
-                </div>
-              </div> */}
-              <div className='sm:hidden'>
-                <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={false} interval={3000} className='sm:py-4'>
+              <div className='sm:hidden mt-4'>
+                <Carousel showIndicators={false} showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={false} interval={3000} className={`sm:py-4 relative ${z_index}`}>
                   {patternData.patternImageUrls.map((img)=>(
-                    <div className="w-full lg:py-8 lg:px-8 bg-gray-200">
-                      <img src={img} alt='pattern snapshots' />
+                    <div className={`w-full lg:py-8 lg:px-8 bg-gray-200`} onClick={()=>handleImageClick(img)}>
+                      <img 
+                        src={img} 
+                        alt='pattern snapshots' 
+                      />
                     </div>
                   ))}
                 </Carousel>
@@ -296,7 +255,7 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
               </div>
             </div>
           <div className="md:col-span-1 sm:hover:border-l-4 sm:ml-4 px-4">
-          <div><h2 className="text-xl font-bold text-blue-500">Screenshots</h2></div>
+          <div><h2 className="sm:block hidden text-xl font-bold text-blue-500">Screenshots</h2></div>
           {patternData.patternImageUrls.length > 0 ? (
             <div className="hidden my-2 sm:grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {patternData.patternImageUrls.map((image, index) => {

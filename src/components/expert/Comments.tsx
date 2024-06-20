@@ -37,7 +37,7 @@ const Comments: React.FC<{ review: Comment, expertId : string, isVerified : bool
       }
   return (
     <div>
-        <div key={review.id} className='bg-gray-100 p-2 my-3 rounded-lg z-50'>
+        <div key={review.id} className='my-3 rounded-lg z-50'>
             <div className="items-center mt-3 text-sm sm:text-base">
                 <div className='flex items-center'>
                   <Avatar 
@@ -47,12 +47,12 @@ const Comments: React.FC<{ review: Comment, expertId : string, isVerified : bool
                     //   height: '12'
                     // }}  
                   />
-                  <div className='mx-2 bg-blue-100 border-2 rounded-2xl p-1 border-blue-300 w-full'>{review.content}</div>
+                  <div className='mx-2 bg-gray-100 rounded-b-md rounded-tr-md rounded rounded-2xl p-1 w-full p-2'>{review.content}</div>
                 </div>
                     {review.replies.map((comment: Reply)=>(
                       <div className='flex items-center mt-2 ml-4 sm:ml-12'>
                         <Avatar {...stringAvatar(comment.expertName)} className={`${z_index}`}/>
-                        <div className='mx-2 bg-blue-100 border-2 rounded-2xl p-1 border-blue-300 w-full'>{comment.content}</div>
+                        <div className='mx-2 bg-gray-100 rounded-b-md rounded-tr-md rounded rounded-2xl p-1 w-full p-2'>{comment.content}</div>
                       </div>
                     ))}
                     {(replyClicked) ?

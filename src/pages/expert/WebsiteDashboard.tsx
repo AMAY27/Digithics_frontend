@@ -11,16 +11,17 @@ import AuthContext from "../../context/AuthContext1";
 import withExpertAuth from '../../hoc/withExpertAuth';
 import { toast } from "react-toastify";
 import { Avatar, IconButton, Tooltip} from '@mui/material';
-import { IoMdArrowDropdown } from "react-icons/io";
+import { FaAngleDown , FaGreaterThan   } from "react-icons/fa";
 import LoadingPatternCard from '../../components/expert/LoadingPatternCard';
 import LoadingCards from '../../components/expert/LoadingCards';
 import PublishForm from '../../components/expert/PublishForm';
 import {
   OpenInNew as OpenInNewIcon,
+  Info as InfoIcon
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { patternSupportLinks } from '../../utils/patternSupportLinks';
-import { Info as InfoIcon } from "@mui/icons-material";
+import WebsiteDetailsForWebsiteDashboard from '../../components/expert/WebsiteDetailsForWebsiteDashboard';
 
 
 const WebsiteDashboard = () => {
@@ -62,6 +63,7 @@ const WebsiteDashboard = () => {
     const [isPublishOpen, setIsPublishOpen] = useState<boolean>(false);
     const [displayEmptyPatternsText, setDisplayEmptyPatternsText] = useState<boolean>(false);
     const [supportUrl, setSupportUrl] = useState<string>("https://www.deceptive.design/types/fake-scarcity");
+    const [isWebsiteDetailsIconClicked, setIsWebsiteDetailsIcon] = useState(false)
 
     const getWebsiteData = useCallback(async ()=> {
       if(websiteId){
@@ -225,20 +227,23 @@ const WebsiteDashboard = () => {
         <PatternAdditionForm isOpen={isPatternformOpen} onClose={closeFrom} />
         <PatternDetailsComponent isOpen={isPatternModalOpen} onClose={closePatternModal} expertId={experId ? experId : ""}/>
         <PublishForm isOpen={isPublishOpen} onClose={handlePublishClose} patterns={patterns} expertId={experId ? experId : ""} websiteId={websiteId? websiteId: ""}/>
-        <div className={`sm:mx-12 lg:mx-24 h-screen flex flex-col sm:flex-row gap-0 sm:gap-4 sm:mt-8`}>
-          <div className={`sm:w-1/3 shadow-xl sm:rounded-2xl bg-white h-fit py-6 px-4 ${z_index} sm:sticky sm:top-0`}>
+        <div className={`sm:mx-12 lg:mx-24 h-screen flex flex-col lg:flex-row gap-0 sm:gap-4 sm:mt-8`}>
+          <div className={`lg:w-1/3 shadow-xl sm:rounded-2xl bg-white h-fit py-6 px-4 ${z_index} sm:sticky sm:top-0`}>
             <div className='flex justify-between items-center'>
-              <h2 className='text-xl sm:text-2xl font-bold text-blue-500'>{websiteName}</h2>
-              <div className='mx-2 mt-2 sm:mt-0 flex justify-end'>
+              <div>
+                <h2 className='text-xl sm:text-2xl font-bold text-blue-500'>{websiteName}</h2>
+                <Link to={websiteData.baseUrl} target="_blank" className='text-blue-500'>
+                  <p className="truncate ...">{websiteData.baseUrl}...<OpenInNewIcon sx={{ width: "20px", height: "20px" }} /></p>
+                </Link>
+              </div>
+              <div className='mx-2 sm:mt-0 flex'>
                 <button onClick={openForm} className='flex justify-center items-center lg:hidden px-2 rounded-full bg-blue-500 text-white text-2xl'>+</button>
                 {websiteData.phase === "InProgress" ? <button onClick={openForm} className='hidden lg:block px-8 py-2 rounded-md bg-blue-500 text-white'>Contribute a Pattern</button> : null}
+                <button className='lg:hidden px-2 rounded-full bg-gray-200 ml-2 text-lg font-bold text-gray-500' onClick={()=>setIsWebsiteDetailsIcon(!isWebsiteDetailsIconClicked)}>{isWebsiteDetailsIconClicked ? <FaAngleDown /> : <FaGreaterThan/>}</button>
               </div>
             </div>
-            <Link to={websiteData.baseUrl} target="_blank" className='text-blue-500'>
-              <p className="truncate ...">{websiteData.baseUrl}...</p>
-              <OpenInNewIcon sx={{ width: "20px", height: "20px" }} />
-            </Link>
-            <div className='mt-3'>
+            {isWebsiteDetailsIconClicked && <WebsiteDetailsForWebsiteDashboard experts={experts} patternTypes={patternTypes} handleSelectOption={handleSelectOption}/>}
+            <div className='hidden lg:block mt-3'>
               <div className='w-full bg-gray-200 py-2 px-2 mt-2 rounded-lg'>
                 <h2 className='font-bold'>Description</h2>
                 <p>{websiteData.description}</p>
