@@ -4,7 +4,6 @@ import { IoMdClose } from "react-icons/io";
 import { PatternData, PatternDetailsProps } from "../../types";
 import ConfirmVerifyModal from "./ConfirmVerifyModal";
 import {
-  getSpecificPattern,
   stringAvatar,
   CommentPost,
 } from "../../services/expertServices";
@@ -15,8 +14,6 @@ import "react-toastify/dist/ReactToastify.css";
 import withExpertAuth from "../../hoc/withExpertAuth";
 import Avatar from "@mui/material/Avatar";
 import {
-  ErrorOutline as ErrorOutlineIcon,
-  Verified as VerifiedIcon,
   OpenInNew as OpenInNewIcon,
 } from "@mui/icons-material";
 import ImageSlides from "./ImageSlides";
@@ -38,13 +35,13 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   const [imgOpen, setImageOpen] = useState<boolean>(false);
   const [currentPatternData, setCurrentPatternData] = useState<PatternData>();
   const { patternData, setPatternData } = useExpertContext();
-  const {websiteData, setWebsiteData} = useExpertContext();
-  const getBgColorClass =
-    patternData.phaseColor === "#F9C32F"
-      ? "bg-[#F9C32F]"
-      : patternData.phaseColor === "#E6321D"
-      ? "bg-[#E6321D]"
-      : "bg-[#538D3F]";
+  const { setWebsiteData} = useExpertContext();
+  // const getBgColorClass =
+  //   patternData.phaseColor === "#F9C32F"
+  //     ? "bg-[#F9C32F]"
+  //     : patternData.phaseColor === "#E6321D"
+  //     ? "bg-[#E6321D]"
+  //     : "bg-[#538D3F]";
   const expertVerificationPhase = patternData.expertVerifications.map(
     (verification) => verification.expertVerificationPhase
   );
@@ -88,11 +85,7 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
     setCommentTextClicked(false);
     onClose();
   };
-  const verifyOpen = (patternExist: boolean) => {
-    setIsPatternExist(patternExist);
-    setVerifyClicked(true);
-    setZindex(true)
-  };
+  
   const verifyClose = () => {
     setVerifyClicked(false);
     setZindex(false);
