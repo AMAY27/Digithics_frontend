@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useContext } from "react"
+import { createContext, useState, ReactNode, useContext, useEffect } from "react"
 import { PatternData, WebsiteData, extensionPatternDetails } from "../types"
 
 interface ExpertProviderProps {
@@ -24,7 +24,9 @@ const ExpertContext = createContext<ExpertContextProps | undefined>(undefined)
 export const ExpertProvider: React.FC<ExpertProviderProps> = ({ children }) => {
     const [websiteId, setWebsiteId] = useState< | null>(null);
     const [websiteName, setWebsiteName] = useState< | null>(null);
-    const [patternData, setPatternData] = useState<PatternData>({
+    const [patternData, setPatternData] = useState<PatternData>(()=>{
+        const saved = localStorage.getItem('patternData');
+        return saved ? JSON.parse(saved) : {
         comments : [],
         createdAt : "",
         createdByExpertId : "",
@@ -42,27 +44,37 @@ export const ExpertProvider: React.FC<ExpertProviderProps> = ({ children }) => {
         phaseText : "",
         hoverText : "",
         isPatternExists : false
+        }
     });
-    const [websiteData, setWebsiteData] = useState<WebsiteData>({
-        baseUrl: "",
-        description : "",
-        websiteName: "",
-        phase : "",
-        websiteId : "",
-        isCompleted : false,
-        patternDetails:[],
-        isDarkPatternFree : false,
-        expertDetails : [],
-        userId : "",
-        additionalUrls : [],
-        primaryExpertId : "",
-        contributorName: "",
-        upVotes : [],
-        downVotes: [],
-        phaseColor : "",
-        phaseText : "",
-        hoverText : "",
+    const [websiteData, setWebsiteData] = useState<WebsiteData>(()=>{
+        const saved = localStorage.getItem('websiteData');
+        return saved ? JSON.parse(saved) : {
+            baseUrl: "",
+            description : "",
+            websiteName: "",
+            phase : "",
+            websiteId : "",
+            isCompleted : false,
+            patternDetails:[],
+            isDarkPatternFree : false,
+            expertDetails : [],
+            userId : "",
+            additionalUrls : [],
+            primaryExpertId : "",
+            contributorName: "",
+            upVotes : [],
+            downVotes: [],
+            phaseColor : "",
+            phaseText : "",
+            hoverText : "",
+        }
     })
+    useEffect(() => {
+        localStorage.setItem('websiteData', JSON.stringify(websiteData));
+    }, [websiteData]);
+    useEffect(() => {
+        localStorage.setItem('patternData', JSON.stringify(patternData));
+    }, [patternData]);
     const [extensionPatterns, setExtensionPatterns] = useState<extensionPatternDetails[]>([])
     const contextData: ExpertContextProps = {
         websiteId,

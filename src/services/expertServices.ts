@@ -110,11 +110,11 @@ const CommentPost = async(patternId : String, websiteId : String, expertId : Str
     expertId : expertId,
     content : commentText
   }
-  const response: AxiosResponse<PatternData> = await api.post<PatternData>(
+  const response = await api.post(
     `/website/${websiteId}/pattern/${patternId}/comment`,
     body,
   );
-  return response.status;
+  return response;
 }
 
 const replyPost = async(commentId : String, websiteId : String, patternId : String, expertId : String, replyText : String) => {

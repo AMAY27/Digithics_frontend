@@ -314,6 +314,7 @@ export interface KpiCardProps {
 export interface WebsiteAdditionProps {
   isOpen: boolean;
   onClose: () => void;
+  handleWebsiteSubmitSuccess: () => void;
   id:string;
 }
 

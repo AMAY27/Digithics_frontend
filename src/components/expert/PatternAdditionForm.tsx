@@ -14,6 +14,7 @@ import { patternSupportLinks } from '../../utils/patternSupportLinks';
 
 const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClose}) => {
     const { extensionPatterns } = useExpertContext();
+    const { websiteData, setWebsiteData } = useExpertContext();
     const websiteId = sessionStorage.getItem("websiteId");
     const experId = localStorage.getItem("userId");
     const token = localStorage.getItem("authToken");
@@ -145,11 +146,14 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                     }
                     const body = files
                     const imgResponse = await api.put(`/website/${response.data.patternId}/uploadImages`, body, config);
+                    console.log(imgResponse.data.website);
                     if(imgResponse.status===200){
                         //onClose();
                         toast.success("Pattern added successfully", {
                             position: toast.POSITION.TOP_CENTER
                         });
+                        setWebsiteData({...imgResponse.data.website});
+                        console.log(websiteData);
                         setIsSubmitClicked(false)
                         setFormData({
                             description : "",
