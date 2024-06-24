@@ -6,7 +6,12 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      copperPlate : ["CustomFont"] 
+    },
+    backgroundImage: {
+      'home-nav' : "url('/public/assets/bgimage.svg')"
+    }
   },
   plugins: [],
 }

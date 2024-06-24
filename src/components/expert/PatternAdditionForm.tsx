@@ -9,18 +9,20 @@ import api from '../../utils/AxiosHelper';
 import { Tooltip } from '@mui/material';
 import { useExpertContext } from '../../context/ExpertContext'
 import ImageSlides from './ImageSlides';
+import { patternSupportLinks } from '../../utils/patternSupportLinks';
 
 
 const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClose}) => {
     const { extensionPatterns } = useExpertContext();
+    const { websiteData, setWebsiteData } = useExpertContext();
     const websiteId = sessionStorage.getItem("websiteId");
     const experId = localStorage.getItem("userId");
     const token = localStorage.getItem("authToken");
     const [formData, setFormData]  = useState({
-        patterntype : "",
         description : "",
         patternlink : "",
     })
+    const [patternType, setPatternType] = useState<string>("Fake scarcity")
     const [images, setImages] = useState<File[]>([]);
     const [imgToDisplay, setImgToDisplay] = useState<File>();
     const [formImageToDisplay, setFormImageToDisplay] = useState<File>();
@@ -30,8 +32,15 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
     const z_index = zIndex ? "-z-50" : "z-0";
     const [patternTime, setPatternTime] = useState<number>()
     const [imageTime, setImageTime] = useState<number>();
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
+    const [browseImage, setBrowseImage] = useState<File>();
+    const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false)
+
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>{
         setFormData(p=>({...p,[e.target.name] : e.target.value}))
+    }
+
+    const handleSelectPatternType = (patterntype:string) =>{
+        setPatternType(patterntype)
     }
 
     const handleImageDelete = (index: number) => {
@@ -58,6 +67,15 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
         setZindex(true);
     }
 
+    // const browsedImageEditClick = (image:File) => {
+    //     setPatternTime(image.lastModified);
+    //     setImageTime(image.lastModified);
+    //     setImgToDisplay(image);
+    //     setImageOpen(true);
+    //     setZindex(true);
+
+    // }
+
     const handleFormImageClose = () => {
         setFormImageOpen(false);
         setZindex(false);
@@ -74,28 +92,46 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
         imageExists ? toast.error("image already added") : setImages((prev) => [...prev, file])
     }
 
+    const handleImageChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.files);
+        const browsedImages = e.target.files;
+        console.log(browsedImages);
+        if(browsedImages){
+            const browsedImagesArray = Array.from(browsedImages)
+            console.log(browsedImagesArray);
+            browsedImagesArray.forEach((img)=>{
+                const imageExists = images.some((prevImages) => prevImages.name === img.name);
+                imageExists ? toast.error("image Already added") : setImages((prev) => [...prev, img])
+            })
+        }
+        console.log(images);
+        // const imageExists = images.some((img)=> img.name === browsedImg.name);
+        // imageExists ? toast.error("image already added") : setImages((prev) => [...prev, browsedImg])
+    }
+
     const handleAddclickExtensionPattern = (patternType:string, patternUrl: string, patternDesc:string) => {
         setFormData({
-            patterntype : patternType,
             description : patternDesc,
             patternlink : patternUrl
         })
+        setPatternType(patternType)
     }
 
     const handleCloseClick = () => {
         setFormData({
-            patterntype : "",
             description : "",
             patternlink : "",
         })
+        setPatternType("")
         setImages([]);
         onClose();
     }
 
     const handleSubmit = async(e:React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitClicked(true)
         if(websiteId && experId && token){
-            const response = await patternPost(websiteId,experId,formData.patterntype, formData.description, formData.patternlink ); 
+            const response = await patternPost(websiteId,experId, patternType, formData.description, formData.patternlink ); 
             if(response.status === 200){
                 try {
                     const files = new FormData();
@@ -110,16 +146,20 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                     }
                     const body = files
                     const imgResponse = await api.put(`/website/${response.data.patternId}/uploadImages`, body, config);
+                    console.log(imgResponse.data.website);
                     if(imgResponse.status===200){
-                        onClose();
+                        //onClose();
                         toast.success("Pattern added successfully", {
                             position: toast.POSITION.TOP_CENTER
                         });
+                        setWebsiteData({...imgResponse.data.website});
+                        console.log(websiteData);
+                        setIsSubmitClicked(false)
                         setFormData({
-                            patterntype : "",
                             description : "",
                             patternlink : ""
                         })
+                        setPatternType("")
                         setImages([])
                     }else{
                         toast.error("Error while adding pattern, try again", {
@@ -128,6 +168,9 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                     }
                 } catch (error) {
                     console.error(error);
+                    toast.error("Error while adding pattern, try again", {
+                        position: toast.POSITION.TOP_CENTER
+                    });
                 }
             }
         }
@@ -135,38 +178,48 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
     if(!isOpen) return null
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50'>
-        <div className='bg-white py-2 px-8 rounded-lg relative z-10 space-y-8 h-4/5 w-4/5 overflow-auto'>
+        <div className='bg-white py-2 px-4 sm:px-8 rounded-lg relative z-10 space-y-4 h-full w-full sm:h-4/5 sm:w-4/5 overflow-auto'>
             <ImageCarousel image={imgToDisplay} isOpen={imgOpen} patternTime={patternTime?patternTime:0} imageTime={imageTime?imageTime:0} onClose={handleImageClose}/>
             <ImageSlides image={formImageToDisplay} isOpen={formImgOpen} onClose={handleFormImageClose}/>
             <>
-            <div className="flex justify-end">
+            <div className="flex items-center justify-end">
                 <IoMdClose
                     onClick={handleCloseClick}
                     className="hover:bg-blue-200 rounded-lg p-2 text-4xl"
                 />
             </div>
-            <div className='grid md:grid-cols-5 gap-4'>
-                <div className='md:col-span-3'>
+            <h2 className='text-lg text-blue-500 font-bold leading-7'>Contribute a Pattern</h2>
+            <div className='grid grid-cols-1 md:grid-cols-5 gap-4'>
+                <div className='col-span-1 md:col-span-3'>
                     <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
-                            <h2 className='text-base font-bold leading-7'>Add a Pattern</h2>
-                            <div className='grid md:grid-cols-3 space-x-4'>
+                        <div className="space-y-2 sm:space-y-4">
+                            <div className='md:grid md:grid-cols-3 md:space-x-4'>
                                 <div className='col-span-1'>
                                     <label htmlFor="patterntype" className='mb-2 block text-md font-medium'>Pattern Type *</label>
-                                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-300'>
-                                        <input 
+                                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2'>
+                                        {/* <input 
                                             type='text' 
                                             name='patterntype'
                                             required 
                                             id='patterntype' 
                                             value={formData.patterntype}
                                             onChange={handleChange}
-                                            className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Pattern Type"/>
+                                            className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' placeholder="Enter Pattern Type"/> */}
+                                        <select 
+                                            id="patterntype" 
+                                            className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
+                                            name='patterntype'
+                                            onChange={(e)=>handleSelectPatternType(e.target.value)}
+                                        >
+                                            {patternSupportLinks.map((url)=>(
+                                                <option value={url.patternName}>{url.patternName}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='col-span-2'>
                                     <label htmlFor="patternlink" className='mb-2 block text-md font-medium'>Link *</label>
-                                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-300'>
+                                    <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2'>
                                         <input 
                                             type='text' 
                                             name='patternlink' 
@@ -186,12 +239,12 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                     value={formData.description}
                                     onChange={handleChange}
                                     required
-                                    className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-green-300' placeholder='Short description for pattern detection and review'></textarea>
+                                    className='block w-full rounded-md border-0 py-1.5 pl-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2' placeholder='Short description for pattern detection and review'></textarea>
                             </div>
-                            <div className='col-span-full border-2 rounded-md flex flex-col items-center justify-center'>
-                                <p className='mb-4 block text-md font-medium pt-4'>Select images from the pattern list from extension</p>
-                                {/* <label htmlFor="images" className='mb-2 block text-md font-medium p-2 bg-gray-100 mb-4 rounded-md cursor-pointer'>
-                                    <span className="text-blue-500">Choose File</span>
+                            <div className='col-span-full border-2 rounded-md flex flex-col items-center justify-center px-4'>
+                                <p className='mb-4 block text-center font-medium pt-4'>Select images from the pattern list from extension or</p>
+                                <label htmlFor="images" className='mb-2 block text-md font-medium p-2 bg-gray-100 mb-4 rounded-md cursor-pointer'>
+                                    <span className="text-blue-500">Browse Images</span>
                                     <input
                                         type='file'
                                         name='images'
@@ -201,9 +254,9 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                         multiple 
                                         className='hidden'
                                     />
-                                </label> */}
+                                </label>
                                 {images.length > 0 && (
-                                    <div className="my-2 px-6 grid grid-cols-4 gap-4 w-full">
+                                    <div className="my-2 px-6 sm:grid grid-cols-4 gap-4 w-full">
                                         {images.map((image, index) => {
                                         //const file = formData.get('files') as File
                                         return(
@@ -212,7 +265,7 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                                     src={URL.createObjectURL(image)}
                                                     alt={`Preview ${index + 1}`}
                                                     className="w-full h-20 object-cover rounded-md border-2 border-gray-200 opacity-50 cursor-pointer"
-                                                    onClick={()=>handleAddedImageClick(image)}
+                                                    onClick={() => handleAddedImageClick(image)}
                                                 />
                                                 <button
                                                     type="button"
@@ -228,15 +281,30 @@ const PatternAdditionForm: React.FC<PatternAdditionFormProps> = ({isOpen, onClos
                                     </div>
                                 )}
                             </div>
-                            <div className='grid md:grid-cols-3 space-x-7'>
-                                <button className='col-span-2 bg-blue-300 p-3 rounded-lg' type='submit'>Add pattern for review</button>
-                                <button className='col-span-1 bg-blue-300 p-3 rounded-lg' onClick={handleCloseClick}>Close</button>
+                            <div className='space-x-7'>
+                                <button className='flex items-center justify-center col-span-2 bg-blue-300 p-3 rounded-lg w-full' type='submit' disabled={isSubmitClicked}>{isSubmitClicked ? (
+                                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        ></circle>
+                                        <path
+                                            className="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                        ></path>
+                                    </svg>) : "Submit Pattern"}</button>
+                                {/* <button className='col-span-1 bg-blue-300 p-3 rounded-lg' onClick={handleCloseClick}>Close</button> */}
                             </div>
                         </div>
                     </form>
                 </div>
-                <div className='md:col-span-2 border-2 p-4 h-[30rem] overflow-auto'>
-                    <div className='border-b-2 pb-2'><h1 className='text-lg text-blue-500 font-bold'>Pattern Details from VORT extension</h1></div>
+                <div className='hidden md:block md:col-span-2 border-2 p-4 h-[30rem] overflow-auto'>
+                    <div className='border-b-2 pb-2'><h1 className='text-lg text-blue-500 font-bold'>Pattern Details from DIGIHICS extension</h1></div>
                     <div className='pb-4'> 
                         {extensionPatterns.length===0 ? 
                         <div className="flex justify-center items-center h-20 bg-gray-100 shadow-md rounded-md my-4"><h2>No patterns added from extension</h2></div> : 

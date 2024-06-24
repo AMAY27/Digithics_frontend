@@ -37,34 +37,33 @@ const ExpertSignin = () => {
           } 
       }
   return (
-        <div className='grid md:grid-cols-4'>
-            <div className='md:col-span-1 items-center justify-center w-full mt-30 bg-slate-800'>
-                <div className='flex justify-center w-full mt-24'><img src='/assets/logo.png' className='w-24' alt='backdrop'/></div>
-                <div className="space-y-4 p-4 m-5">
-                    <h2 className='text-base font-bold leading-7 flex text-blue-500 font-bold text-xl justify-center mb-12'>Sign In To the Expert portal</h2>
-                    <div className='space-y-4 w-80'>
-                        <form onSubmit={handleSubmit}>
+    <div className='h-screen flex justify-center items-center py-24' id='secondarydiv'>
+        <div className='w-full sm:w-3/5 lg:w-1/3 mx-4 sm:mx-12 md:mx-24 p-6 md:p-12 h-auto mix-blend-hard-light bg-slate-600 border-2 border-blue-500'>
+            <h2 className='flex justify-center w-full text-white font-copperPlate font-bold text-4xl mb-12'>DIGITHICS</h2>
+            <div className="space-y-4">
+                <div className='space-y-4 w-full'>
+                    <form onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="patterntype" className='mb-2 block text-md font-medium text-blue-500'>Enter Email</label>
+                            <label htmlFor="patterntype" className='mb-2 block text-md font-medium text-white'>Enter Email</label>
                             <div className='rounded-md shadow-sm ring-1 ring-inset ring-gray-300'>
                                 <input 
                                     type='text' 
                                     name='email' 
                                     id='patterntype'
                                     onChange={handleChange}
-                                    className='block border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-500 w-full text-white' 
+                                    className='block border-0 py-1.5 bg-transparent pl-1 placeholder:text-gray-300 w-full text-white' 
                                     placeholder="Enter your email"/>
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="patternlink" className='my-2 block text-md font-medium text-blue-500'>Password</label>
+                            <label htmlFor="patternlink" className='my-2 block text-md font-medium text-white'>Password</label>
                             <div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300'>
                                 <input 
                                     type='password' 
                                     name='password' 
                                     id='patternlink'
                                     onChange={handleChange}
-                                    className='block border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-500 text-white w-full' 
+                                    className='block border-0 bg-transparent py-1.5 pl-1 placeholder:text-gray-300 w-full text-white' 
                                     placeholder="Enter your password"/>
                             </div>
                         </div>
@@ -74,14 +73,12 @@ const ExpertSignin = () => {
                             <p><span className='text-blue-500 font-bold'>Password:</span> expert</p>
                         </div>
                         <button className='bg-blue-500 p-2 rounded-md mt-4 w-full font-bold hover:bg-blue-700' type='submit'>Login</button>
-                        </form>
-                    </div> 
-                </div>
-            </div>
-            <div className='h-screen md:col-span-3' id='secondarydiv'>
-                {/* <div className='w-3/5'><img src='../../public/assets/virtual-5663279.svg'/></div> */}
+                    </form>
+                </div> 
             </div>
         </div>
+        {/* <div className='w-3/5'><img src='../../public/assets/virtual-5663279.svg'/></div> */}
+    </div>
   )
 }
 

@@ -110,11 +110,11 @@ const CommentPost = async(patternId : String, websiteId : String, expertId : Str
     expertId : expertId,
     content : commentText
   }
-  const response: AxiosResponse<PatternData> = await api.post<PatternData>(
+  const response = await api.post(
     `/website/${websiteId}/pattern/${patternId}/comment`,
     body,
   );
-  return response.status;
+  return response;
 }
 
 const replyPost = async(commentId : String, websiteId : String, patternId : String, expertId : String, replyText : String) => {
@@ -191,6 +191,8 @@ function stringAvatar(name: string) {
   return {
     sx: {
       bgcolor: stringToColor(name),
+      width: 36,
+      height: 36
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };
@@ -225,7 +227,7 @@ const publishWebsite = async(websiteId:string, expertId: string, isCertified: bo
     const response = await api.put(`/website/${websiteId}/publish`, body)
     return response.status;
   } catch (error) {
-    
+    console.error(error)
   }
 }
 
@@ -244,7 +246,6 @@ const base64DataToFile = (base64: string, index:number) => {
 // Function to add a website for certification
 const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormForExperts) => {
   try {
-
     const response = await api.post(`/website`, website);
     return response;
   } catch (error) {
@@ -252,4 +253,40 @@ const addWebsiteForCertificationforExpert = async (website: WebsiteDetailsFormFo
   }
 };
 
-export { getPatternsData, getSpecificPattern, CommentPost, replyPost, getWebsites, patternPost, stringAvatar, postVerification, getUserDetails, getSpecificWebsite, publishWebsite, getKpiDetails, postImages, base64DataToFile, addWebsiteForCertificationforExpert};
+const addUpVoteToWebsite = async (websiteId: string, userId: string) => {
+  try {
+    const response = await api.post(`/website/${websiteId}/user/${userId}/upVote`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const addDownVoteToWebsite = async (websiteId: string, userId: string) => {
+  try {
+    const response = await api.post(`/website/${websiteId}/user/${userId}/downVote`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export { 
+  getPatternsData, 
+  getSpecificPattern, 
+  CommentPost, 
+  replyPost, 
+  getWebsites, 
+  patternPost, 
+  stringAvatar, 
+  postVerification, 
+  getUserDetails, 
+  getSpecificWebsite, 
+  publishWebsite, 
+  getKpiDetails, 
+  postImages, 
+  base64DataToFile, 
+  addWebsiteForCertificationforExpert, 
+  addUpVoteToWebsite,
+  addDownVoteToWebsite
+};

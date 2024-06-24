@@ -1,0 +1,10 @@
+#homemain {
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background: linear-gradient(to left, rgba(2, 24, 77, 0.984), rgba(3, 47, 129, 0.859)),  url('../../../public/assets/bgimage.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: sticky;
+}

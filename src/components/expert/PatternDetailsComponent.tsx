@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Comments from "./Comments";
 import { IoMdClose } from "react-icons/io";
-import { PatternDetailsProps } from "../../types";
+import { PatternData, PatternDetailsProps } from "../../types";
 import ConfirmVerifyModal from "./ConfirmVerifyModal";
 import {
-  getSpecificPattern,
   stringAvatar,
   CommentPost,
 } from "../../services/expertServices";
@@ -15,11 +14,11 @@ import "react-toastify/dist/ReactToastify.css";
 import withExpertAuth from "../../hoc/withExpertAuth";
 import Avatar from "@mui/material/Avatar";
 import {
-  ErrorOutline as ErrorOutlineIcon,
-  Verified as VerifiedIcon,
   OpenInNew as OpenInNewIcon,
 } from "@mui/icons-material";
 import ImageSlides from "./ImageSlides";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   isOpen,
@@ -34,18 +33,27 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   const [zindex, setZindex ] = useState(false)
   const z_index = zindex ? "z-[-10]" : "z-[30]";
   const [imgOpen, setImageOpen] = useState<boolean>(false);
+  const [currentPatternData, setCurrentPatternData] = useState<PatternData>();
   const { patternData, setPatternData } = useExpertContext();
-  const getBgColorClass =
-    patternData.phaseColor === "#F9C32F"
-      ? "bg-[#F9C32F]"
-      : patternData.phaseColor === "#E6321D"
-      ? "bg-[#E6321D]"
-      : "bg-[#538D3F]";
+  const { setWebsiteData} = useExpertContext();
+  // const getBgColorClass =
+  //   patternData.phaseColor === "#F9C32F"
+  //     ? "bg-[#F9C32F]"
+  //     : patternData.phaseColor === "#E6321D"
+  //     ? "bg-[#E6321D]"
+  //     : "bg-[#538D3F]";
   const expertVerificationPhase = patternData.expertVerifications.map(
     (verification) => verification.expertVerificationPhase
   );
   const expertName = localStorage.getItem("userName");
   const [verifyClicked, setVerifyClicked] = useState<boolean>(false);
+
+  useEffect(()=>{
+    setCurrentPatternData(patternData);
+    console.log("patternDatafromuseEffect",patternData);
+  },[patternData]);
+
+
   const handleCommentSubmit = async () => {
     setCommentTextClicked(false);
     try {
@@ -55,18 +63,14 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
         expertId,
         commentText
       );
-      if (commentObj === 201) {
+      if (commentObj.status === 201) {
+        console.log("PatternData before COmment:",patternData);
         toast.success("Comment added successfully", {
           position: toast.POSITION.TOP_CENTER,
         });
-        const response = await getSpecificPattern(
-          patternData.id,
-          patternData.websiteId
-        );
+        setPatternData(commentObj.data.pattern);
+        setWebsiteData({...commentObj.data.website});
         setCommentText("");
-        if (response) {
-          setPatternData(response);
-        }
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -81,11 +85,7 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
     setCommentTextClicked(false);
     onClose();
   };
-  const verifyOpen = (patternExist: boolean) => {
-    setIsPatternExist(patternExist);
-    setVerifyClicked(true);
-    setZindex(true)
-  };
+  
   const verifyClose = () => {
     setVerifyClicked(false);
     setZindex(false);
@@ -119,8 +119,12 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="bg-white px-4 py-2 rounded-lg relative z-30 w-4/5 h-4/5">
-      <ImageSlides image={imgToDisplay ? imgToDisplay : ""} isOpen={imgOpen} onClose={handleImageClose}/>
+      <div className="bg-white sm:px-4 py-2 rounded-lg z-30 w-full h-full sm:w-4/5 sm:h-4/5 overflow-y-auto">
+      <ImageSlides 
+        image={imgToDisplay ? imgToDisplay : ""} 
+        isOpen={imgOpen} 
+        onClose={handleImageClose}
+      />
         <>
           <ConfirmVerifyModal
             isOpen={verifyClicked}
@@ -139,90 +143,57 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
               <PatternUpdateForm isOpen={editing} onClose={onCloseEdit} />
             </>
           ) : (
-            <div className="space-y-4 px-4 pt-2 pb-2">
-              <div className="flex justify-between items-center mb-1">
+            <div className="sm:space-y-4 px-4 pt-2 pb-2">
+              <div className="sm:flex justify-between items-center mb-1">
                 <div className="flex items-center">
                   <h2 className="font-bold text-2xl text-blue-500 mr-5">
-                    {patternData.patternType}
+                    {currentPatternData && currentPatternData.patternType}
                   </h2>
-                  <div
-                    className={`text-white p-2 rounded-2xl ${getBgColorClass}`}
-                  >
-                    {patternData.phaseText}
-                  </div>
                 </div>
-                {patternData.createdByExpertId === expertId ? (
+                {currentPatternData && currentPatternData.createdByExpertId === expertId ? (
                   <div className="flex items-center text-md ">
                     <h2 className="italic font-serif text-gray-500 mr-2">
                       Added By - you
                     </h2>
-                    {/* <div>
-                      <LiaEdit
-                        className="hover:bg-blue-200 rounded-lg p-2 text-4xl"
-                        onClick={() => setEditing(true)}
-                      />
-                    </div> */}
                   </div>
                 ) : (
                   <div className="flex items-center text-md">
-                    {patternData.isAutoGenerated===true ? 
+                    {currentPatternData && currentPatternData.isAutoGenerated===true ? 
                     <h2 className="text-gray-500 italic font-serif text-gray-400 mr-2">
                       Added By - AI Model
                     </h2> :
                     <h2 className="text-gray-500 italic font-serif text-gray-400 mr-2">
-                    Added By - {patternData.expertName}
+                    Added By - {currentPatternData && currentPatternData.expertName}
                   </h2>}
                   </div>
                 )}
               </div>
               <div className="w-60">
-              <a href={patternData.detectedUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500" id="detectedUrl" onClick={()=>handleUrlClick(patternData.description)}>
-              <p className="truncate ...">{patternData.detectedUrl}...<OpenInNewIcon sx={{ width: "20px", height: "20px" }} /></p>
-              </a>
+                <a href={currentPatternData && currentPatternData.detectedUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500" id="detectedUrl" onClick={()=>handleUrlClick(patternData.description)}>
+                  <p className="truncate ...">{currentPatternData && currentPatternData.detectedUrl}...<OpenInNewIcon sx={{ width: "20px", height: "20px" }} /></p>
+                </a>
               </div>
             </div>
           )}
           <div className="md:grid grid-cols-3">
-            <div className="md:col-span-2 h-[25rem] overflow-auto pr-4">
-              <div className="border-b-2 p-4 bg-gray-100 rounded-lg mx-4 mt-4">
+            <div className="col-span-1 md:col-span-2 sm:h-[25rem] sm:pr-4">
+              <div className="border-b-2 p-4 bg-gray-100 rounded-lg mx-4 mt-4 text-sm sm:text-base">
                 <h2 className="font-bold">Feedback</h2>
-                <p>{patternData.description}</p>
+                <p>{currentPatternData && currentPatternData.description}</p>
               </div>
-              <div className="flex items-center mt-5">
-                <h2 className="px-4 py-2 text-xl text-blue-500 font-bold">
-                  Verification 
-                </h2>
-                {patternData.expertVerifications.map((verify) =>
-                  verify.expertId === expertId &&
-                  verify.expertVerificationPhase === "NotVerified" ? (
-                    <div className="flex justify-center col-span-1 rounded-lg">
-                      <button
-                        className="border-2 bg-white hover:bg-green-300 p-2 mr-5 rounded-xl bg-green-100 border-green-300"
-                        onClick={() => verifyOpen(true)}
-                      >
-                        <div className="flex items-center"><VerifiedIcon className="mr-2"/><p>Is a Pattern</p></div>
-                      </button>
-                      <button
-                        className="border-2 bg-white hover:bg-red-300 p-2 rounded-xl bg-red-100 border-red-300"
-                        onClick={() => verifyOpen(false)}
-                      >
-                        <div className="flex items-center"><ErrorOutlineIcon className="mr-2"/><p>Not a Pattern</p></div>
-                      </button>
+              <div className='sm:hidden mt-4'>
+                <Carousel showIndicators={false} showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={false} interval={3000} className={`sm:py-4 relative ${z_index}`}>
+                  {currentPatternData && currentPatternData.patternImageUrls.map((img)=>(
+                    <div className={`w-full lg:py-8 lg:px-8 bg-gray-200`} onClick={()=>handleImageClick(img)}>
+                      <img 
+                        src={img} 
+                        alt='pattern snapshots' 
+                      />
                     </div>
-                  ) : null
-                )}
-              </div>
-              <div className="grid grid-cols-2 mx-4 mt-3">
-                <div className="col-span-1 bg-gray-100 rounded-lg border-b-2 p-3">
-                  {patternData.expertVerifications.map((verify) =>
-                    <div className="text-md flex justify-center">
-                      {verify.expertId!==expertId ? verify.expertName : "You"} : {verify.expertVerificationPhase==="NotVerified" ? "Not Verified" : verify.expertVerificationPhase==="VerifiedWithPattern" ? "Verified With Pattern" : "Verified Without Pattern"}
-                    </div>
-                  )}
-                </div>
+                  ))}
+                </Carousel>
               </div>
               <div>
-                {expertVerificationPhase.includes("NotVerified") ? (
                   <div className={`col-span-full mt-2 px-4 pt-4 pb-2 flex items-center`}>
                     <Avatar
                       {...stringAvatar(expertName ? expertName : "")}
@@ -238,7 +209,6 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                       placeholder="Add a comment"
                     ></textarea>
                   </div>
-                ) : null}
                 {commentTextClicked ? (
                   <div className="px-4">
                     <button
@@ -259,12 +229,12 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
               <div className="px-4 py-2">
                 <h2 className="font-bold text-xl text-blue-500">Comments</h2>
                 <div>
-                  {patternData.comments.length === 0 ? (
+                  {currentPatternData && currentPatternData.comments.length === 0 ? (
                     <div className="bg-gray-100 p-4 my-3 rounded-lg">
                       <p className="text-gray-400">No feedbacks added yet</p>
                     </div>
                     ) : (
-                    patternData.comments.map((comment) => (
+                    currentPatternData && currentPatternData.comments.map((comment) => (
                       <Comments
                         review={comment}
                         expertId={expertId}
@@ -280,11 +250,11 @@ const PatternDetailsComponent: React.FC<PatternDetailsProps> = ({
                 </div>
               </div>
             </div>
-          <div className="md:col-span-1 hover:border-l-4 ml-4 px-4">
-            <div><h2 className="text-xl font-bold text-blue-500">Screenshots</h2></div>
-          {patternData.patternImageUrls.length > 0 ? (
-            <div className="my-2 grid grid-cols-2 gap-4 w-full">
-              {patternData.patternImageUrls.map((image, index) => {
+          <div className="md:col-span-1 sm:hover:border-l-4 sm:ml-4 px-4">
+          <div><h2 className="sm:block hidden text-xl font-bold text-blue-500">Screenshots</h2></div>
+          {currentPatternData && currentPatternData.patternImageUrls.length > 0 ? (
+            <div className="hidden my-2 sm:grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+              {currentPatternData && currentPatternData.patternImageUrls.map((image, index) => {
                 //const file = formData.get('files') as File
                 return(
                   <div key={index} className={`relative ${z_index}`}>

@@ -150,6 +150,9 @@ export interface WebsiteData {
   userId: string;
   additionalUrls: [];
   primaryExpertId: string;
+  contributorName: string;
+  upVotes : string[],
+  downVotes: string[],
   phaseColor: string;
   phaseText: string;
   hoverText: string;
@@ -165,6 +168,7 @@ export interface PatternCardProps {
   loggedInExpert: string;
   openModal: () => void;
   patternData: PatternData;
+  z_index: String;
 }
 
 export interface extensionImages {
@@ -310,6 +314,7 @@ export interface KpiCardProps {
 export interface WebsiteAdditionProps {
   isOpen: boolean;
   onClose: () => void;
+  handleWebsiteSubmitSuccess: () => void;
   id:string;
 }
 
