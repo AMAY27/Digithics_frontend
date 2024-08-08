@@ -1,63 +1,56 @@
-# V-Tenet Dark Pattern Detection Frontend
+# Digithics Project
 
-Welcome to the V-Tenet Dark Pattern Detection Frontend! The Frontend part for this project is created using [React](https://reactjs.org/), a popular JavaScript library for building user interfaces with [MUI](https://mui.com/) and [TailwindCSS](https://tailwindcss.com/) for creating mobile-friendly, interactive user interfaces.
+## Overview
+Digithics is a digital platform dedicated to raising awareness about dark patterns and deceptive practices on the web. The platform educates users about these unethical design patterns and provides a portal for reporting instances of dark patterns they encounter online. Our mission is to empower users to recognize and report these manipulative tactics, fostering a more transparent and user-friendly web experience.
 
-## Getting Started
+![Digithics Interface](./readme-images/digithics1.png)
 
-Follow these steps to set up the project on your local machine:
+## Features
 
-### Prerequisites
+### User End
+- **Educational Resources**: Access detailed information about various types of dark patterns, including examples and explanations.
 
-Before you begin, make sure you have the following installed on your system:
+![Digithics Interface](./readme-images/digithics2.png)
 
-- Node.js
-- npm (Node Package Manager): npm is included with Node.js installation.
+![Digithics Interface](./readme-images/digithics3.png)
 
-### Installation
+![Digithics Interface](./readme-images/digithics4.png)
 
-1. Clone the repository to your local machine:
+- **Dark Pattern Reporting**: Report dark patterns you come across on any website. Submissions include details such as screenshots, URLs, and descriptions of the manipulative behavior.
+- **User Interaction**: Engage with the community by viewing reported dark patterns and discussing them through comments. Users can also upvote and downVote the reported websites.
 
-   ```bash
-   git clone https://gitlab.hrz.tu-chemnitz.de/vsr/edu/planspiel/WS2324/v-tenet.git
-   ```
+![Digithics Interface](./readme-images/digithics5.png)
 
-2. Change into project's Frontend Directory
+![Digithics Interface](./readme-images/digithics6.png)
 
-   ```bash
-   cd frontend
-   ```
+![Digithics Interface](./readme-images/digithics7.png)
 
-3. Install Project Dependencies
+![Digithics Interface](./readme-images/digithics8.png)
 
-   ```bash
-   npm install
-   ```
+![Digithics Interface](./readme-images/digithics9.png)
 
-### Environment Variables
+![Digithics Interface](./readme-images/digithics10.png)
 
-To run the project, you need to set up environment variables. Create a .env file in the root of the frontend folder and add the following variables:
+## Mobile UI
 
-```env
-REACT_APP_API_BASE_URL_CLIENT = https://api.example.com
-```
+![Digithics Interface](./readme-images/digithicsmobile1.png)
 
-Replace `https://api.example.com` with the base URL of your API and your_api_key with the actual API key required for authentication.
+![Digithics Interface](./readme-images/digithicsmobile2.png)
 
-You can even refer to the `sample.env` file and replace the contents with actual values
+![Digithics Interface](./readme-images/digithicsmobile3.png)
 
-## Running the Application
+![Digithics Interface](./readme-images/digithicsmobile4.png)
 
-Once you have completed the installation and set up the environment variables, you can start the development server:
 
-```bash
-npm start
-```
+## Technology Stack
 
-This command will start the development server, and you can view your React app by navigating to http://localhost:3000 in your web browser.
+### Frontend
+- **React.js**: A popular JavaScript library for building the user interface, ensuring a responsive and interactive experience.
+- **Axios**: For making HTTP requests from the frontend to the backend API.
 
-## Stay in Touch
+### Backend
+- **NestJS**: A progressive Node.js framework for building efficient and scalable server-side applications.
+- **TypeORM**: An ORM (Object-Relational Mapping) tool for managing database interactions with strong typing support.
+- **MongoDB**: A powerful, open-source NoSQL database used to store user data, reports, and content.
 
-Feel free to reach out to the developers for any questions or feedback. Here are some ways to stay in touch:
 
-- Website: [V-Tenet](https://v-tenet.vercel.app/)
-- LinkedIn: [LinkedIn](https://www.linkedin.com/in/v-tenet/)
